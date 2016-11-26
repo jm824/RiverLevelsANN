@@ -3,7 +3,7 @@ import urllib3
 
 """
 One time script to grab all the station references (unique id's) from the EA API and save them in
-a text file. This us useful for testing and saving making too many HTTP requests
+a text file. This us useful for testing and saves making too many HTTP requests to the API
 """
 http = urllib3.PoolManager()
 stationReq = http.request('GET', 'http://environment.data.gov.uk/flood-monitoring/id/stations')
