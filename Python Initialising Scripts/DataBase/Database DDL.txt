@@ -1,0 +1,54 @@
+CREATE TABLE GaugeStation(
+id VARCHAR(30) PRIMARY KEY,
+RLOIid VARCHAR(20) UNIQUE,
+catchmentName VARCHAR(75),	
+dateOpened DATE,
+datumOffset DECIMAL,
+label  VARCHAR(100) NOT NULL,
+notation  VARCHAR(75) NOT NULL,
+riverName VARCHAR(75),
+stationReference VARCHAR(20) NOT NULL,
+town VARCHAR(75),
+wiskiID VARCHAR(20),
+lat DECIMAL NOT NULL,
+long DECIMAL NOT NULL,
+easting INTEGER,
+northing INTEGER,
+status VARCHAR(200),
+statusReason VARCHAR(200),
+statusDate TIMESTAMP,
+type VARCHAR(20) NOT NULL,
+highestRecentDateTime TIMESTAMP,
+highestRecent DECIMAL,
+maxOnRecordDateTime TIMESTAMP,
+maxOnRecord DECIMAL,
+minOnRecordDateTime TIMESTAMP,
+minOnRecord DECIMAL,
+scaleMax DECIMAL,
+datum DECIMAL,
+typicalRangeHigh DECIMAL,
+typicalRangeLow DECIMAL
+);
+
+CREATE TABLE GaugeMeasure(
+id VARCHAR(60) PRIMARY KEY,
+datumType VARCHAR(20),
+label VARCHAR(100) NOT NULL,
+notation VARCHAR(75) NOT NULL,
+parameter VARCHAR(30) NOT NULL,
+parameterName VARCHAR(30) NOT NULL,
+period DECIMAL,
+qualifier VARCHAR(30) NOT NULL,
+station VARCHAR(30) REFERENCES GaugeStation (id),
+stationReference VARCHAR(20) NOT NULL,
+unit VARCHAR(30),
+unitName VARCHAR(20),
+valueType VARCHAR(20)
+);
+
+CREATE TABLE GaugeReading(
+dateTime TIMESTAMP,
+measureId VARCHAR(60) REFERENCES GaugeMeasure (id),
+VALUE DECIMAL NOT NULL,
+PRIMARY KEY (dateTime, measureId)
+);
