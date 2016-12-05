@@ -53,6 +53,15 @@ VALUE DECIMAL NOT NULL,
 PRIMARY KEY (dateTime, measureId)
 );
 
+CREATE TABLE hourlygaugereading
+(
+    datetime TIMESTAMP NOT NULL,
+    measureid VARCHAR(60) NOT NULL,
+    value NUMERIC NOT NULL,
+    CONSTRAINT ghourlygaugereading_pkey PRIMARY KEY (datetime, measureid),
+    CONSTRAINT gaugereading_measureid_fkey FOREIGN KEY (measureid) REFERENCES gaugemeasure (id)
+);
+
 CREATE TABLE SrewStations(
 id DECIMAL PRIMARY KEY,
 id_type VARCHAR(10),
@@ -61,4 +70,13 @@ src_id DECIMAL,
 lat DECIMAL NOT NULL,
 long DECIMAL NOT NULL,
 src_name VARCHAR(100)
+);
+
+CREATE TABLE HourlySrewReading
+(
+    datetime TIMESTAMP NOT NULL,
+    stationId DECIMAL NOT NULL,
+    VALUE DECIMAL NOT NULL,
+    CONSTRAINT HourlySrewReading_pkey PRIMARY KEY (datetime, stationId),
+    CONSTRAINT HourlySrewReading_stationId_fkey FOREIGN KEY (stationId) REFERENCES SrewStations(id)
 );
