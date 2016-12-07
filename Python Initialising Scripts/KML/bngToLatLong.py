@@ -84,4 +84,5 @@ def OSGB36toWGS84(E,N):
     lon = lon*180/pi
 
     #Job's a good'n.
+    return lon, lat
 
