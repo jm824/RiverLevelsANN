@@ -1,0 +1,126 @@
+select * from gaugemeasure
+WHERE id = 'L3211-level-stage-i-15_min-mAOD'
+
+select * from gaugemeasure
+WHERE station = '2448TH'
+
+select * from gaugemeasure
+WHERE qualifier = 'Groundwater'
+
+SELECT * FROM gaugestation
+WHERE id = '2448TH'
+
+SELECT * FROM gaugestation
+WHERE type = 'Groundwater'
+
+SELECT id
+FROM gaugemeasure
+GROUP BY station
+HAVING count(*) > 0;
+
+--get all measures for given station
+SELECT *
+FROM gaugemeasure
+LEFT JOIN gaugestation
+ON gaugemeasure.station = gaugestation.id
+WHERE gaugestation.id = 'E21136';
+
+SELECT count(*)
+FROM gaugemeasure
+LEFT JOIN gaugestation
+ON gaugemeasure.station = gaugestation.id
+
+--get gauge stations of a certain type
+SELECT * FROM gaugestation
+WHERE type = 'Station'
+
+SELECT id, status
+FROM gaugestation
+Where status = 'statusClosed'
+
+
+SELECT * FROM(
+  SELECT id FROM gaugestation
+  UNION
+  SELECT id FROM ghoststation
+  UNION
+  SELECT id FROM naughtystation
+  UNION
+  SELECT id FROM failedstation)
+  A
+  WHERE id = 'L3211'
+
+SELECT * FROM gaugereading
+			  WHERE datetime >= '2016-01-17 00:00'
+        AND datetime <= '2016-01-17 23:59'
+			  AND measureid = '2448TH-level-stage-i-15_min-mASD'
+ORDER BY datetime DESC
+
+select count(*) from gaugereading
+
+SELECT measureid, datetime
+FROM gaugereading
+ORDER BY datetime DESC
+LIMIT 10;
+
+SELECT *
+FROM gaugemeasure
+WHERE station = '720215'
+
+WITH r_measure AS(
+  SELECT id
+  FROM gaugemeasure
+  WHERE station = 'L08015'
+  AND qualifier = 'Stage'
+)
+SELECT datetime, value
+FROM gaugereading
+WHERE measureid IN (SELECT id FROM r_measure)
+AND datetime >= '2015-11-17 00:00'
+AND datetime <= '2015-11-21 23:00'
+ORDER BY datetime DESC
+LIMIT  10;
+
+WITH r_measure AS(
+  SELECT id
+  FROM gaugemeasure
+  WHERE station = 'L08015'
+  AND qualifier = 'Stage'
+)
+SELECT datetime, value
+FROM gaugereading
+WHERE measureid IN (SELECT id FROM r_measure)
+ORDER BY datetime DESC
+LIMIT  10;
+
+SELECT datetime, measureid, value
+FROM gaugereading
+WHERE (datetime::TIME) = '09:00'
+AND measureid = '2448TH-level-stage-i-15_min-mASD'
+ORDER BY datetime DESC
+LIMIT 31;
+
+SELECT lat, long, id
+FROM gaugestation;
+
+SELECT datetime, measureid, value
+FROM gaugereading
+
+SELECT datetime, value
+FROM hourlygaugereading
+WHERE datetime >= '2015-11-17 00:00'
+AND datetime <= '2016-01-30 23:00'
+ORDER BY datetime DESC
+
+SELECT id, lat, long
+FROM srewstations;
+
+
+
+
+
+
+
+
+
+
