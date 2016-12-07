@@ -41,21 +41,10 @@
       <file leaf-file-name="stationIngestor.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2295">
+            <state relative-caret-position="340">
               <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
-                <marker date="1485793871208" expanded="true" signature="1511:1869" ph="SELECT * FRO... id" />
-                <marker date="1485793871208" expanded="true" signature="1548:1575" ph="SELECT id FR... gaugestation" />
-                <marker date="1485793871208" expanded="true" signature="1626:1653" ph="SELECT id FR... ghoststation" />
-                <marker date="1485793871208" expanded="true" signature="1704:1733" ph="SELECT id FR... naughtystation" />
-                <marker date="1485793871208" expanded="true" signature="1784:1812" ph="SELECT id FR... failedstation" />
-                <marker date="1485793871208" expanded="true" signature="2611:2647" ph="INSERT INTO GhostStation... " />
-                <marker date="1485793871208" expanded="true" signature="8431:8469" ph="INSERT INTO NaughtyStation... " />
-                <marker date="1485793871208" expanded="true" signature="8748:8785" ph="INSERT INTO FailedStation... " />
-                <marker date="1485793871208" expanded="true" signature="8883:9964" ph="INSERT INTO GaugeStation... " />
-                <marker date="1485793871208" expanded="true" signature="10119:10157" ph="INSERT INTO NaughtyStation... " />
-                <marker date="1485793871208" expanded="true" signature="12257:12704" ph="INSERT INTO GaugeMeasure... " />
               </folding>
             </state>
           </provider>
@@ -64,7 +53,7 @@
       <file leaf-file-name="GaugeStationIDGrabber.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/GaugeStationIDGrabber.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
+            <state relative-caret-position="34">
               <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="6" selection-end-column="3" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
@@ -73,14 +62,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="measureReadingIngestor.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="measureReadingIngestor.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/measureReadingIngestor.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="357">
               <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1485807892591" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+                <marker date="1480612441562" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bngToLatLong.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/KML/bngToLatLong.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="686">
+              <caret line="85" column="20" selection-start-line="85" selection-start-column="20" selection-end-line="85" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#58#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -99,6 +100,7 @@
         <option value="$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py" />
         <option value="$PROJECT_DIR$/Python Initialising Scripts/Gauge/GaugeStationIDGrabber.py" />
         <option value="$PROJECT_DIR$/Python Initialising Scripts/Gauge/measureReadingIngestor.py" />
+        <option value="$PROJECT_DIR$/Python Initialising Scripts/KML/bngToLatLong.py" />
       </list>
     </option>
   </component>
@@ -109,8 +111,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-104" />
-    <option name="y" value="657" />
+    <option name="x" value="1272" />
+    <option name="y" value="-8" />
     <option name="width" value="1296" />
     <option name="height" value="1000" />
   </component>
@@ -125,7 +127,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -138,11 +140,66 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Python Initialising Scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Python Initialising Scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="KML" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/PycharmProjects/NIMROD" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -439,27 +496,27 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-104" y="657" width="1296" height="1000" extended-state="0" />
+    <frame x="1272" y="-8" width="1296" height="1000" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27993527" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28478965" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298731" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3298731" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298731" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26528257" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3298731" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26528257" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -496,17 +553,96 @@
           <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
-            <marker date="1485793871208" expanded="true" signature="1511:1869" ph="SELECT * FRO... id" />
-            <marker date="1485793871208" expanded="true" signature="1548:1575" ph="SELECT id FR... gaugestation" />
-            <marker date="1485793871208" expanded="true" signature="1626:1653" ph="SELECT id FR... ghoststation" />
-            <marker date="1485793871208" expanded="true" signature="1704:1733" ph="SELECT id FR... naughtystation" />
-            <marker date="1485793871208" expanded="true" signature="1784:1812" ph="SELECT id FR... failedstation" />
-            <marker date="1485793871208" expanded="true" signature="2611:2647" ph="INSERT INTO GhostStation... " />
-            <marker date="1485793871208" expanded="true" signature="8431:8469" ph="INSERT INTO NaughtyStation... " />
-            <marker date="1485793871208" expanded="true" signature="8748:8785" ph="INSERT INTO FailedStation... " />
-            <marker date="1485793871208" expanded="true" signature="8883:9964" ph="INSERT INTO GaugeStation... " />
-            <marker date="1485793871208" expanded="true" signature="10119:10157" ph="INSERT INTO NaughtyStation... " />
-            <marker date="1485793871208" expanded="true" signature="12257:12704" ph="INSERT INTO GaugeMeasure... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/GaugeStationIDGrabber.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/measureReadingIngestor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1480612441562" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/bngToLatLong.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/RiverReadingsArchiveFileDownloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="7" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/GaugeStationIDGrabber.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="6" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/measureReadingIngestor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1480612441562" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/RiverReadingsArchiveFileDownloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="7" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -527,7 +663,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1485807892591" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+            <marker date="1480612441562" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
           </folding>
         </state>
       </provider>
@@ -581,28 +717,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2295">
+        <state relative-caret-position="340">
           <caret line="22" column="7" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
-            <marker date="1485793871208" expanded="true" signature="1511:1869" ph="SELECT * FRO... id" />
-            <marker date="1485793871208" expanded="true" signature="1548:1575" ph="SELECT id FR... gaugestation" />
-            <marker date="1485793871208" expanded="true" signature="1626:1653" ph="SELECT id FR... ghoststation" />
-            <marker date="1485793871208" expanded="true" signature="1704:1733" ph="SELECT id FR... naughtystation" />
-            <marker date="1485793871208" expanded="true" signature="1784:1812" ph="SELECT id FR... failedstation" />
-            <marker date="1485793871208" expanded="true" signature="2611:2647" ph="INSERT INTO GhostStation... " />
-            <marker date="1485793871208" expanded="true" signature="8431:8469" ph="INSERT INTO NaughtyStation... " />
-            <marker date="1485793871208" expanded="true" signature="8748:8785" ph="INSERT INTO FailedStation... " />
-            <marker date="1485793871208" expanded="true" signature="8883:9964" ph="INSERT INTO GaugeStation... " />
-            <marker date="1485793871208" expanded="true" signature="10119:10157" ph="INSERT INTO NaughtyStation... " />
-            <marker date="1485793871208" expanded="true" signature="12257:12704" ph="INSERT INTO GaugeMeasure... " />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/GaugeStationIDGrabber.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
+        <state relative-caret-position="34">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="6" selection-end-column="3" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
@@ -610,13 +735,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/bngToLatLong.py" />
     <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/measureReadingIngestor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1485807892591" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+            <marker date="1480612441562" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/KML/bngToLatLong.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="686">
+          <caret line="85" column="20" selection-start-line="85" selection-start-column="20" selection-end-line="85" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
           </folding>
         </state>
       </provider>
