@@ -15,6 +15,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/RiverLevelsANN$RiverReadingsArchiveFileDownloader.coverage" NAME="RiverReadingsArchiveFileDownloader Coverage Results" MODIFIED="1479923511337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Python Initialising Scripts/Gauge" />
     <SUITE FILE_PATH="coverage/RiverLevelsANN$stationGrabber.coverage" NAME="stationGrabber Coverage Results" MODIFIED="1480336787330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Python Initialising Scripts/Gauge" />
+    <SUITE FILE_PATH="coverage/RiverLevelsANN$RiverNowCasting.coverage" NAME="RiverNowCasting Coverage Results" MODIFIED="1481201627745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Flask" />
     <SUITE FILE_PATH="coverage/RiverLevelsANN$SREWReadingIngestor.coverage" NAME="SREWReadingIngestor Coverage Results" MODIFIED="1480858672332" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Python Initialising Scripts/SREW" />
     <SUITE FILE_PATH="coverage/RiverLevelsANN$measureReadingIngestor.coverage" NAME="measureReadingIngestor Coverage Results" MODIFIED="1485807938918" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Python Initialising Scripts/Gauge" />
     <SUITE FILE_PATH="coverage/RiverLevelsANN$ValidSrewLatLongToDB.coverage" NAME="ValidSrewLatLongToDB Coverage Results" MODIFIED="1480613829574" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Python Initialising Scripts/SREW" />
@@ -54,11 +55,10 @@
       <file leaf-file-name="ValidSrewLatLongToDB.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/SREW/ValidSrewLatLongToDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
+            <state relative-caret-position="782">
               <caret line="47" column="24" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1480614785409" expanded="true" signature="1287:1532" ph="INSERT INTO SrewStations... " />
               </folding>
             </state>
           </provider>
@@ -76,15 +76,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SREWReadingIngestor.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SREWReadingIngestor.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/SREW/SREWReadingIngestor.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="425">
               <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1480858672273" expanded="true" signature="999:1171" ph="INSERT INTO hourlysrewreading... " />
+                <marker date="1481201452438" expanded="true" signature="999:1171" ph="INSERT INTO hourlysrewreading... " />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RiverNowCasting.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Flask/RiverNowCasting.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -104,6 +114,7 @@
         <option value="$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py" />
         <option value="$PROJECT_DIR$/Python Initialising Scripts/SREW/ValidSrewLatLongToDB.py" />
         <option value="$PROJECT_DIR$/Python Initialising Scripts/SREW/SREWReadingIngestor.py" />
+        <option value="$PROJECT_DIR$/Flask/RiverNowCasting.py" />
       </list>
     </option>
   </component>
@@ -144,6 +155,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -212,10 +225,22 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RiverLevelsANN" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Flask" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -230,25 +255,7 @@
       <recent name="D:\RiverLevelsANN\Python Initialising Scripts\Gauge" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.SREWReadingIngestor">
-    <configuration default="false" name="RiverReadingsArchiveFileDownloader" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Python Initialising Scripts/Gauge" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="RiverLevelsANN" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Python Initialising Scripts/Gauge/RiverReadingsArchiveFileDownloader.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.RiverNowCasting">
     <configuration default="false" name="stationGrabber" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -318,6 +325,24 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Python Initialising Scripts/SREW/SREWReadingIngestor.py" />
       <option name="PARAMETERS" value="-y 2015 -p data/Hourly/" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="RiverNowCasting" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Flask" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="RiverLevelsANN" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Flask/RiverNowCasting.py" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
@@ -530,19 +555,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.RiverReadingsArchiveFileDownloader" />
-      <item index="1" class="java.lang.String" itemvalue="Python.stationGrabber" />
-      <item index="2" class="java.lang.String" itemvalue="Python.measureReadingIngestor" />
-      <item index="3" class="java.lang.String" itemvalue="Python.ValidSrewLatLongToDB" />
-      <item index="4" class="java.lang.String" itemvalue="Python.SREWReadingIngestor" />
+      <item index="0" class="java.lang.String" itemvalue="Python.stationGrabber" />
+      <item index="1" class="java.lang.String" itemvalue="Python.measureReadingIngestor" />
+      <item index="2" class="java.lang.String" itemvalue="Python.ValidSrewLatLongToDB" />
+      <item index="3" class="java.lang.String" itemvalue="Python.SREWReadingIngestor" />
+      <item index="4" class="java.lang.String" itemvalue="Python.RiverNowCasting" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.SREWReadingIngestor" />
-        <item index="1" class="java.lang.String" itemvalue="Python.ValidSrewLatLongToDB" />
-        <item index="2" class="java.lang.String" itemvalue="Python.measureReadingIngestor" />
-        <item index="3" class="java.lang.String" itemvalue="Python.stationGrabber" />
-        <item index="4" class="java.lang.String" itemvalue="Python.RiverReadingsArchiveFileDownloader" />
+        <item index="0" class="java.lang.String" itemvalue="Python.RiverNowCasting" />
+        <item index="1" class="java.lang.String" itemvalue="Python.SREWReadingIngestor" />
+        <item index="2" class="java.lang.String" itemvalue="Python.ValidSrewLatLongToDB" />
+        <item index="3" class="java.lang.String" itemvalue="Python.measureReadingIngestor" />
+        <item index="4" class="java.lang.String" itemvalue="Python.stationGrabber" />
       </list>
     </recent_temporary>
   </component>
@@ -561,9 +586,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1272" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27993527" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28478965" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -603,6 +628,58 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="3" selection-start-line="4" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+            <marker date="1480612441776" expanded="true" signature="1511:1869" ph="SELECT * FRO... id" />
+            <marker date="1480612441776" expanded="true" signature="1548:1575" ph="SELECT id FR... gaugestation" />
+            <marker date="1480612441776" expanded="true" signature="1626:1653" ph="SELECT id FR... ghoststation" />
+            <marker date="1480612441776" expanded="true" signature="1704:1733" ph="SELECT id FR... naughtystation" />
+            <marker date="1480612441776" expanded="true" signature="1784:1812" ph="SELECT id FR... failedstation" />
+            <marker date="1480612441776" expanded="true" signature="2611:2647" ph="INSERT INTO GhostStation... " />
+            <marker date="1480612441776" expanded="true" signature="8431:8469" ph="INSERT INTO NaughtyStation... " />
+            <marker date="1480612441776" expanded="true" signature="8748:8785" ph="INSERT INTO FailedStation... " />
+            <marker date="1480612441776" expanded="true" signature="8883:9964" ph="INSERT INTO GaugeStation... " />
+            <marker date="1480612441776" expanded="true" signature="10119:10157" ph="INSERT INTO NaughtyStation... " />
+            <marker date="1480612441776" expanded="true" signature="12257:12704" ph="INSERT INTO GaugeMeasure... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/SREW/ValidSrewLatLongToDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="782">
+          <caret line="47" column="24" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/measureReadingIngestor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
+          <folding>
+            <marker date="1480612441562" expanded="true" signature="1213:1388" ph="INSERT INTO GaugeReading... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/SREW/SREWReadingIngestor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1481201452438" expanded="true" signature="999:1171" ph="INSERT INTO hourlysrewreading... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/Gauge/stationIngestor.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="16" column="3" selection-start-line="4" selection-start-column="0" selection-end-line="16" selection-end-column="3" />
           <folding>
@@ -628,7 +705,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1480614785409" expanded="true" signature="1287:1532" ph="INSERT INTO SrewStations... " />
           </folding>
         </state>
       </provider>
@@ -707,11 +783,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Python Initialising Scripts/SREW/ValidSrewLatLongToDB.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
+        <state relative-caret-position="782">
           <caret line="47" column="24" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1480614785409" expanded="true" signature="1287:1532" ph="INSERT INTO SrewStations... " />
           </folding>
         </state>
       </provider>
@@ -730,7 +805,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="203">
           <caret line="308" column="0" selection-start-line="308" selection-start-column="0" selection-end-line="308" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -740,8 +814,16 @@
           <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1480858672273" expanded="true" signature="999:1171" ph="INSERT INTO hourlysrewreading... " />
+            <marker date="1481201452438" expanded="true" signature="999:1171" ph="INSERT INTO hourlysrewreading... " />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Flask/RiverNowCasting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
