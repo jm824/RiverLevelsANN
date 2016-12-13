@@ -3,6 +3,14 @@ from xml.etree import ElementTree
 from bngToLatLong import OSGB36toWGS84
 import simplekml
 
+"""
+One time script to take the water body catchment polygons plot them in KML.
+This script only needs to be run once.
+
+This reads data from a static file and creates a static kml file in return. This file can be read
+straight  into Google Earth
+"""
+
 #Read in the polygon catchment data
 file_name = 'WFD_River_Waterbody_Catchments_Cycle2.gml'
 full_file = os.path.abspath(os.path.join('data', file_name))
@@ -21,4 +29,4 @@ for p in polygon:  #for each polygon
     pol = kml.newpolygon(name='Polygon')
     pol.outerboundaryis = polygon
 
-kml.save('simpleCatchments.kml')
+kml.save('data\catchmentPolygons.kml')
