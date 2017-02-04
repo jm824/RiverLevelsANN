@@ -4,17 +4,21 @@ import csv
 
 """
 Script to read in data from the archived SREW recordings csv files from CEDA.
-Specify the year to read in to the database
+Specify the year to read in to the database as well as the station id
 Optional - specify the directory containing the archive files
 """
 
-def read_in_archive_data(year, path):
+def read_in_archive_data(year, path, station):
     connection = 'dbname=trout user=postgres password=67a256 host=localhost port=5432'
     try:
         dbconn = psycopg2.connect(connection)
         cur = dbconn.cursor()
     except:
         print('Connection to the database could not be established')
+
+    cur.execute("SELECT id FROM srewstations WHERE id = (%s);", (station,))
+    if cur.fetchone() is None:
+        exit(station + " is not a valid station")
 
 #for each day/fil
     countEntered = 0
@@ -25,25 +29,26 @@ def read_in_archive_data(year, path):
         data = csv.reader(csvFile, delimiter=',')
         reading = {}
         for row in data:
-            reading['dateTime'] = row[0]
-            reading['stationid'] = row[1]
-            reading['value'] = row[8]
+            if row[1].lstrip() == station:
+                reading['dateTime'] = row[0]
+                reading['stationid'] = row[1]
+                reading['value'] = row[8]
 
-            try:
-                readingSQL = "INSERT INTO hourlysrewreading" \
-                             "(dateTime, stationid, value)" \
-                             "VALUES (%(dateTime)s, %(stationid)s, %(value)s);"
-                cur.execute(readingSQL, reading)
-                countEntered +=1
-                dbconn.commit()
-            except psycopg2.DataError:
-                #Reach here if the format of the reading is not correct
-                countIgnored +=1
-                dbconn.rollback()
-            except psycopg2.IntegrityError:
-                #Reach here if the station id given is not in the database
-                countIgnored += 1
-                dbconn.rollback()
+                try:
+                    readingSQL = "INSERT INTO hourlysrewreading" \
+                                 "(dateTime, stationid, value)" \
+                                 "VALUES (%(dateTime)s, %(stationid)s, %(value)s);"
+                    cur.execute(readingSQL, reading)
+                    countEntered +=1
+                    dbconn.commit()
+                except psycopg2.DataError:
+                    #Reach here if the format of the reading is not correct
+                    countIgnored +=1
+                    dbconn.rollback()
+                except psycopg2.IntegrityError:
+                    #Reach here if the station id given is not in the database
+                    countIgnored += 1
+                    dbconn.rollback()
 
     print('Number of entries: ' + str(countEntered))
     print('Number ignored: ' + str(countIgnored))
@@ -54,6 +59,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='argument handler')
     parser.add_argument('-year', '-y', required= True, help='Year to read in: yyyy format')
     parser.add_argument('-path', '-p', required=False, help='The directory containing the data file')
+    parser.add_argument('-station', '-s', required=True, help='Station for which to read in readings')
     args = parser.parse_args()
 
     try:
@@ -63,6 +69,6 @@ if __name__ == '__main__':
         exit()
 
     try:
-        read_in_archive_data(year, args.path)
+        read_in_archive_data(year, args.path, args.station)
     except FileNotFoundError:
         print('No such file or directory')
