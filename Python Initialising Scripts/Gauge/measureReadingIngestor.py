@@ -59,6 +59,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='argument handler')
     parser.add_argument('-start', '-s', required= True, help='Start date in dd-mm-yyyy format')
     parser.add_argument('-end', '-e', required=True, help='End date in dd-mm-yyyy format')
+    parser.add_argument('-measure', '-m', required=False, help='The measure to ingest readings for')
     parser.add_argument('-path', '-p', required=False, help='The directory containing the data file ')
     args = parser.parse_args()
 
