@@ -8,7 +8,7 @@ Specify the start and end dates (inclusive)
 Optional - specify the directory containing the archive files
 """
 
-def read_in_archive_data(startDate, endDate, path):
+def read_in_archive_data(startDate, endDate, path, measure):
     connection = 'dbname=trout user=postgres password=67a256 host=localhost port=5432'
     try:
         dbconn = psycopg2.connect(connection)
@@ -29,28 +29,29 @@ def read_in_archive_data(startDate, endDate, path):
             reading = {}
             for row in data:
                 if row[0] == 'dateTime': continue #skip heading row
-                reading['dateTime'] = row[0]
-                reading['measureId'] = row[1].split('/')[-1]
-                reading['value'] = row[2]
+                if row[1].split('/')[-1] == measure:
+                    reading['dateTime'] = row[0]
+                    reading['measureId'] = row[1].split('/')[-1]
+                    reading['value'] = row[2]
 
-                try:
-                    readingSQL = "INSERT INTO GaugeReading" \
-                                 "(dateTime, measureId, value)" \
-                                 "VALUES (%(dateTime)s, %(measureId)s, %(value)s);"
-                    cur.execute(readingSQL, reading)
-                    countEntered +=1
-                    dbconn.commit()
-                except psycopg2.DataError:
-                    #Reach here if the format of the reading is not correct
-                    countIgnored +=1
-                    dbconn.rollback()
-                except psycopg2.IntegrityError:
-                    #Reach here if either the reading does not have a station or if it is already entered
-                    countIgnored += 1
-                    dbconn.rollback()
+                    try:
+                        readingSQL = "INSERT INTO hourlyGaugeReading" \
+                                     "(dateTime, measureId, value)" \
+                                     "VALUES (%(dateTime)s, %(measureId)s, %(value)s);"
+                        cur.execute(readingSQL, reading)
+                        countEntered +=1
+                        dbconn.commit()
+                    except psycopg2.DataError:
+                        #Reach here if the format of the reading is not correct
+                        countIgnored +=1
+                        dbconn.rollback()
+                    except psycopg2.IntegrityError:
+                        #Reach here if either the reading does not have a station or if it is already entered
+                        countIgnored += 1
+                        dbconn.rollback()
 
-        print('Number of entries: ' + countEntered)
-        print('Number ignored: ' + countIgnored)
+        print('Number of entries: ' + str(countEntered))
+        print('Number ignored: ' + str(countIgnored))
         print('Reached end of file for ' + currentDate)
         startDate = startDate + datetime.timedelta(1)
 
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='argument handler')
     parser.add_argument('-start', '-s', required= True, help='Start date in dd-mm-yyyy format')
     parser.add_argument('-end', '-e', required=True, help='End date in dd-mm-yyyy format')
-    parser.add_argument('-measure', '-m', required=False, help='The measure to ingest readings for')
+    parser.add_argument('-measure', '-m', required=True, help='The measure to ingest readings for')
     parser.add_argument('-path', '-p', required=False, help='The directory containing the data file ')
     args = parser.parse_args()
 
@@ -71,7 +72,7 @@ if __name__ == '__main__':
         exit()
 
     try:
-        read_in_archive_data(startDate, endDate, args.path)
+        read_in_archive_data(startDate, endDate, args.path, args.measure)
     except FileNotFoundError:
         print('No such file or directory')
 

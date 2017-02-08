@@ -80,3 +80,18 @@ CREATE TABLE HourlySrewReading
     CONSTRAINT HourlySrewReading_pkey PRIMARY KEY (datetime, stationId),
     CONSTRAINT HourlySrewReading_stationId_fkey FOREIGN KEY (stationId) REFERENCES SrewStations(id)
 );
+
+CREATE TABLE nimrodcatchments
+(
+    id VARCHAR(30) PRIMARY KEY,
+    raincells VARCHAR(8) ARRAY
+);
+
+CREATE TABLE nimrodreading
+(
+    id VARCHAR(30),
+    datetime TIMESTAMP,
+    data INTEGER ARRAY,
+    PRIMARY KEY (id, datetime),
+    CONSTRAINT nimrodreading_id_fkey FOREIGN KEY (id) REFERENCES nimrodcatchments (id)
+);
