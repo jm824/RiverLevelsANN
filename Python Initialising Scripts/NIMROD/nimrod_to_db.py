@@ -23,11 +23,10 @@ class ReadInNimrod:
         except:
             print('Connection to the database could not be established')
 
-        self.cur.execute("SELECT id, raincells FROM nimrodcatchments")
+        self.cur.execute("SELECT id, raincells FROM catchments")
         self.datapoints = self.cur.fetchall()
         #print(self.datapoints[0][1])
         list = self.datapoints[0][1]
-
         self.ingest()
 
     def ingest(self):
@@ -72,7 +71,7 @@ class ReadInNimrod:
             self.startdatetime += datetime.timedelta(minutes=5)
 
 
-obj = ReadInNimrod('17-11-2015 00:00', '31-12-2015 23:55')
+obj = ReadInNimrod('01-01-2017 00:00', '31-01-2017 23:55')
 
 
 

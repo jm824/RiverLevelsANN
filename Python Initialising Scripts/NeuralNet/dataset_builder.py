@@ -85,7 +85,10 @@ class DatasetBuilder:
 
         result = self.cur.fetchall()
 
-        bounds2 = [0,12,24,48,60,72,144,288,432,786,2016,4032] #intervals at which to collate readings
+        if not result: #check we get back any results
+            values = None
+            return values
+
         bounds = [0,12,24,36,48,60,72,84,96,108,120]
 
         values = []
@@ -193,8 +196,7 @@ class DatasetBuilder:
             values.append(result[0][0])
             return values
 
-
-obj = DatasetBuilder('01-01-2016-0000', '31-12-2016-2355', '2133-level-stage-i-15_min-mASD', 'cat1_2016_6hour.csv' ,6)
+obj = DatasetBuilder('01-01-2017-0000', '31-01-2017-1255', '2133-level-stage-i-15_min-mASD', 'cat1_JAN2017_6hour.csv' ,6)
 
 if __name__ == '__main__':
     import argparse
