@@ -15,12 +15,15 @@ import simplekml
 import bngToLatLong
 import csv
 
-class nimrod:
-    def __init__(self):
+class Nimrod:
+    def __init__(self, date):
+        self.date = date
         self.data = None
+        self.read_in_file(date)
 
-        pathed_file = 'data/201601010030_nimrod_ng_radar_rainrate_composite_1km_UK'
-        file_id = open(pathed_file, "rb")
+    def read_in_file(self, date):
+        path = 'H:/NIMROD/2017/Jan/'
+        file_id = open(path + date, "rb")
         record_length, = struct.unpack(">l", file_id.read(4))
         if record_length != 512: raise ("Unexpected record length", record_length)
 
@@ -28,7 +31,7 @@ class nimrod:
         gen_reals = array.array("f")
         spec_reals = array.array("f")
         characters = array.array("b")
-        spec_ints = array.array("h")  # the actual data?
+        spec_ints = array.array("h")  # the actual data matrix
 
         gen_ints.fromfile(file_id, 31)
         gen_ints.byteswap()
@@ -42,12 +45,12 @@ class nimrod:
         spec_ints.fromfile(file_id, 51)
         spec_ints.byteswap()
 
-        record_length, = struct.unpack(">l", file_id.read(4))
+        struct.unpack(">l", file_id.read(4))
 
         # Read the Data
         array_size = gen_ints[15] * gen_ints[16]
 
-        record_length, = struct.unpack(">l", file_id.read(4))
+        struct.unpack(">l", file_id.read(4))
 
         data = array.array("h")
         try:
@@ -56,14 +59,15 @@ class nimrod:
             if record_length != array_size * 2: raise ("Unexpected record length", record_length)
             data.byteswap()
             self.data = data
-            file_id.close()
 
         except:
             print("Read failed")
 
-        #self.plot_bounding_box()
+        file_id.close()
 
 
+    #Create an KML file which is the bounding box for the NIMROD radar. This can be read into Google Earch
+    #Note that clipping takes place from the bngToLatLong script
     def plot_bounding_box(self):
         # James' edits to get coords for each array entry
         minEasting = -404500.0
@@ -84,6 +88,7 @@ class nimrod:
                 j += 1
         kml.save("data/rainRadarBoundingBox.kml")
 
+    #Create a .csv file which is a matrix of the x,y positions of each 1km rain cell
     def create_coord_matrix(self):
         with open('data/nimrodXY.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
@@ -106,6 +111,8 @@ class nimrod:
                     i = 0
                     j += 1
 
+    #Create a .csv file which is a matrix of the lat,long positions of each 1km rain cell.
+    #Also converts the lat lon to be in WGS84 lat long from BNG (OSGB36)
     def create_latlong_matrix(self):
         with open('data/nimrodLatLon.csv', 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
@@ -129,6 +136,7 @@ class nimrod:
                     i = 0
                     j += 1
 
+    #Same as plot_bound_box() but allows you to specfify your own boundaries as x,y coords
     def plot_sub_boundingbox(self,minx, maxx, miny , maxy):
         minEasting = -404500.0
         maxNorthing = 1549500.0
@@ -147,6 +155,12 @@ class nimrod:
                 i = 0
                 j += 1
         kml.save("data/rainRadarCustomBoundingBox.kml")
+
+    #For the given nimrod file return the data value for the given x,y pos
+    def get_cell_data(self, x, y):
+        if x > 1724 or y > 2174: #if outside the matrix
+            return -2
+        return self.data[(y * 1725) + x]
 
 
 

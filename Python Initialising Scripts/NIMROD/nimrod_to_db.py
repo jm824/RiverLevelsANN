@@ -1,4 +1,4 @@
-import nimrod_reader
+import nimrod
 import datetime
 import psycopg2
 
@@ -23,50 +23,41 @@ class ReadInNimrod:
         except:
             print('Connection to the database could not be established')
 
+        #Currently retrieve all catchments we currently have listed in the database
+        # TODO Make it so we are reading in the nimrod data for a specified catchment only
         self.cur.execute("SELECT id, raincells FROM catchments")
         self.datapoints = self.cur.fetchall()
-        #print(self.datapoints[0][1])
-        list = self.datapoints[0][1]
         self.ingest()
 
     def ingest(self):
         while self.startdatetime.time() <= self.enddatetime.time() and self.startdatetime.date() <= self.enddatetime.date():
             try:
-                radar = nimrod_reader.NimrodData(datetime.datetime.strftime(self.startdatetime,'%Y%m%d%H%M'))
+                radar = nimrod.Nimrod(datetime.datetime.strftime(self.startdatetime,'%Y%m%d%H%M'))
+                for catchment in self.datapoints:  # for each catchment
+                    data = []
+                    for p in catchment[1]:
+                        x, y = p.split(' ', 1)
+                        data.append(radar.get_cell_data(int(x), int(y)))
+                    # insert into database
+                    reading = {}
+                    reading['catchment'] = catchment[0]
+                    reading['datetime'] = self.startdatetime
+                    reading['readings'] = data
             except FileNotFoundError:
                 for catchment in self.datapoints:
                     reading = {}
                     reading['catchment'] = catchment[0]
                     reading['datetime'] = self.startdatetime
                     reading['readings'] = None
-                    try:
-                        sql = "INSERT INTO nimrodreading" \
-                              "(id, datetime, data)" \
-                              "VALUES (%(catchment)s, %(datetime)s, %(readings)s);"
-                        self.cur.execute(sql, reading)
-                        self.dbconn.commit()
-                    except psycopg2.IntegrityError:
-                        self.dbconn.rollback()
-                self.startdatetime += datetime.timedelta(minutes=5)
-                continue
-            for catchment in self.datapoints: #for each catchment
-                data = []
-                for p in catchment[1]:
-                    x,y = p.split(' ', 1)
-                    data.append(radar.get_cell_data(int(x),int(y)))
-                #insert into database
-                reading = {}
-                reading['catchment'] = catchment[0]
-                reading['datetime'] = self.startdatetime
-                reading['readings'] = data
-                try:
-                    sql = "INSERT INTO nimrodreading" \
-                                 "(id, datetime, data)" \
-                                 "VALUES (%(catchment)s, %(datetime)s, %(readings)s);"
-                    self.cur.execute(sql, reading)
-                    self.dbconn.commit()
-                except psycopg2.IntegrityError:
-                    self.dbconn.rollback()
+
+            try:
+                sql = "INSERT INTO nimrodreading" \
+                             "(id, datetime, data)" \
+                             "VALUES (%(catchment)s, %(datetime)s, %(readings)s);"
+                self.cur.execute(sql, reading)
+                self.dbconn.commit()
+            except psycopg2.IntegrityError:
+                self.dbconn.rollback()
 
             self.startdatetime += datetime.timedelta(minutes=5)
 
