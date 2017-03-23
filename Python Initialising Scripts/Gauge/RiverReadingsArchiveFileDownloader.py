@@ -1,21 +1,48 @@
 import urllib3
 import shutil
 import datetime
+import os
 
 """
-One time script to download all 15min archived river level readings from the EA online archive (API).
-Simply specify the start and end date.
+Script to download all 15min archived river level readings from the EA online archive (API).
+Simply specify the start and end date of the files to download.
+A directory to download to can be specified.
 """
 
-http = urllib3.PoolManager()
-prefix = 'riverLevelArchive_' #The prefix chosen for files names
-url = 'http://environment.data.gov.uk/flood-monitoring/archive?date='
-startDate = datetime.date(2016, 11, 17)
-endDate = datetime.date(2016, 11, 18)
-while startDate != endDate:
-    currentDate = startDate.strftime('%Y-%m-%d')
-    print(startDate.strftime('%Y-%m-%d'))
-    with http.request('GET', url + currentDate, preload_content=False) as r, open('data/RiverGauges/archivedRiverLevelRecordings/' + prefix + currentDate + '.csv', 'wb') as out_file:
-        shutil.copyfileobj(r, out_file)
-    #+1 day
-    startDate = startDate + datetime.timedelta(1)
+class DownloadArchiveFiles:
+    def __init__(self, start, end, path=""):
+        try:
+            start = datetime.datetime.strptime(start, '%d-%m-%Y')
+            end = datetime.datetime.strptime(end, '%d-%m-%Y')
+        except ValueError:
+            exit('The year was not entered in the correct format of yyyy')
+        if path:
+            if not os.path.exists(path):
+                exit('The specified path does not exist: ' + path)
+        else:
+            path = ''
+
+        http = urllib3.PoolManager()
+        url = 'http://environment.data.gov.uk/flood-monitoring/archive?date='
+        #For each day archive file
+        while start != end + datetime.timedelta(1):
+            currentDate = start.strftime('%Y-%m-%d')
+            file_path = os.path.join(path, 'riverLevelArchive_' + currentDate + '.csv')
+            #Download archive file as .csv
+            with http.request('GET', url + currentDate, preload_content=False) as r:
+                if r.status != 200: #Check the file is valid by checking HTTP response code
+                    exit('Invalid archive file: ' + currentDate)
+                outfile = open(file_path, 'wb')
+                shutil.copyfileobj(r, outfile)
+            print('Downloaded', start.strftime('%d-%m-%Y'))
+            start = start + datetime.timedelta(1)
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description='argument handler')
+    parser.add_argument('start', help='Start year to download from, dd-mm-yyyy format')
+    parser.add_argument('end', help='Start year to download to, dd-mm-yyyy format')
+    parser.add_argument('--path', '-p', required=False, help='The directory to download the files to')
+    args = parser.parse_args()
+
+    DownloadArchiveFiles(args.start, args.end, args.path)
