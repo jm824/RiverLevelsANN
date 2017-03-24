@@ -3,8 +3,9 @@ import urllib3
 import psycopg2
 
 """
-This script is for ingesting stations and their measures.
-This script can and should be run periodically to ingest new stations.
+This script is for ingesting stations and their measures into the local database.
+Note this script ingests the details about the stations and measures, not the individual readings.
+This script can and should be run periodically to ingest new stations or to amend existing ones
 
 This script can be run at any time. It will retrieve all gauge stations from the EA API and
 check if they are already stored in the local database. If they are not it will add the station and its measures
@@ -13,7 +14,6 @@ will be entered into the appropriate database table.
 
 This script does not check if the details of previously entered station or measures have changed since
 originally being entered into the database. Likewise the current validity of previously entered stations is not checked.
-This should probably be handled from another script as this is for ingesting new stations only.
 """
 
 connection = 'dbname=trout user=postgres password=67a256 host=localhost port=5432'
@@ -21,7 +21,7 @@ try:
     dbconn = psycopg2.connect(connection)
     cur = dbconn.cursor()
 except:
-    print('Connection to the database could not be established')
+    exit('Connection to the database could not be established')
 
 http = urllib3.PoolManager()
 #load list of stations from API
