@@ -35,7 +35,7 @@ class MeasureReadingIngestor:
             exit('Connection to the database could not be established')
 
         # Check if the measure provided is in the database
-        self.cur.execute("SELECT measureid FROM hourlygaugereading WHERE measureid = (%s);", (measure,))
+        self.cur.execute("SELECT id FROM gaugemeasure WHERE id = (%s);", (measure,))
         if self.cur.fetchone() is None:
             exit(measure + " is not a valid measure")
 

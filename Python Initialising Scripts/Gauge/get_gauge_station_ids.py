@@ -2,7 +2,7 @@ import simplejson
 import urllib3
 
 """
-One time script to grab all the station references (unique id's) from the EA API and save them in
+One time use script to grab all the station references (unique id's) from the EA API and save them in
 a text file. This us useful for testing and saves making too many HTTP requests to the API.
 This script is designed to be imported and used within the python console.
 
