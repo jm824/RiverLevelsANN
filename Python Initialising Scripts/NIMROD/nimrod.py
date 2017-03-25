@@ -8,22 +8,30 @@
 Most of this code was not written by me but rather Charles Kilburn.
 This is a script provided by the Met Office to read NIMROD files which has been edited to better
 read the data.
+
+This script now reads in a nimrod file where upon there are several functions to do different
+things with the nimrod data.
+
+The location to the file must be provided as an argument.
 """
 
 import struct, array
 import simplekml
-import bngToLatLong
+import bng_to_latlong
 import csv
+import os
 
 class Nimrod:
-    def __init__(self, date):
-        self.date = date
-        self.data = None
-        self.read_in_file(date)
+    def __init__(self, file):
+        if not os.path.isfile(file):
+            raise FileNotFoundError
 
-    def read_in_file(self, date):
-        path = 'H:/NIMROD/2017/Jan/'
-        file_id = open(path + date, "rb")
+        self.data = None
+        self.read_in_file(file)
+
+    #Code to read in the data from a nimrod binary file (not my code but adapted)
+    def read_in_file(self, location):
+        file_id = open(location, "rb")
         record_length, = struct.unpack(">l", file_id.read(4))
         if record_length != 512: raise ("Unexpected record length", record_length)
 
@@ -65,10 +73,14 @@ class Nimrod:
 
         file_id.close()
 
-
     #Create an KML file which is the bounding box for the NIMROD radar. This can be read into Google Earch
-    #Note that clipping takes place from the bngToLatLong script
-    def plot_bounding_box(self):
+    #Note that clipping takes place from the bng_to_latlong script
+    def plot_bounding_box(self, output):
+        if not output.endswith('.kml'):
+            exit('A .kml file must be specified.')
+        if not os.path.exists(os.path.dirname(output)):
+            exit('Cannot save file to location that does not exist')
+
         # James' edits to get coords for each array entry
         minEasting = -404500.0
         maxNorthing = 1549500.0
@@ -80,41 +92,54 @@ class Nimrod:
             if i == 0 or j == 0 or i == 1724 or j == 2174:
                 easting = minEasting + i * 1000 + 1000 / 2
                 northing = maxNorthing - j * 1000 - 1000 / 2
-                lat, lon = bngToLatLong.OSGB36toWGS84(easting, northing)
+                lat, lon = bng_to_latlong .OSGB36toWGS84(easting, northing)
                 kml.newpoint(name=str(i) + ',' + str(j), coords=[(lon, lat)])
             i += 1
             if i == 1725:
                 i = 0
                 j += 1
-        kml.save("data/rainRadarBoundingBox.kml")
+        kml.save(output)
 
     #Create a .csv file which is a matrix of the x,y positions of each 1km rain cell
-    def create_coord_matrix(self):
-        with open('data/nimrodXY.csv', 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile, delimiter=',')
+    def create_coord_matrix(self, output):
+        if not output.endswith('.csv'):
+            exit('A csv file must be specified.')
+        if not os.path.exists(os.path.dirname(output)):
+            exit('Cannot save file to location that does not exist')
 
-            minEasting = -404500.0
-            maxNorthing = 1549500.0
-            i = 0
-            j = 0
-            row = []
-            for d in self.data:
-                easting = minEasting + i * 1000 + 1000 / 2
-                northing = maxNorthing - j * 1000 - 1000 / 2
-                row.append(str(i) + ',' + str(j))
-                i += 1
-                #if end of row
-                if i == 1725:
-                    #write to csv row
-                    writer.writerow(row)
-                    row = []
-                    i = 0
-                    j += 1
+        try:
+            with open(output, 'w', newline='') as csvfile:
+                writer = csv.writer(csvfile, delimiter=',')
+
+                minEasting = -404500.0
+                maxNorthing = 1549500.0
+                i = 0
+                j = 0
+                row = []
+                for d in self.data:
+                    easting = minEasting + i * 1000 + 1000 / 2
+                    northing = maxNorthing - j * 1000 - 1000 / 2
+                    row.append(str(i) + ',' + str(j))
+                    i += 1
+                    #if end of row
+                    if i == 1725:
+                        #write to csv row
+                        writer.writerow(row)
+                        row = []
+                        i = 0
+                        j += 1
+        except PermissionError:
+            exit('File name not specified.')
 
     #Create a .csv file which is a matrix of the lat,long positions of each 1km rain cell.
     #Also converts the lat lon to be in WGS84 lat long from BNG (OSGB36)
-    def create_latlong_matrix(self):
-        with open('data/nimrodLatLon.csv', 'w', newline='') as csvfile:
+    def create_latlong_matrix(self, output):
+        if not output.endswith('.csv'):
+            exit('A csv file must be specified.')
+        if not os.path.exists(os.path.dirname(output)):
+            exit('Cannot save file to location that does not exist')
+
+        with open(output, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
 
             minEasting = -404500.0
@@ -125,7 +150,7 @@ class Nimrod:
             for d in self.data:
                 easting = minEasting + i * 1000 + 1000 / 2
                 northing = maxNorthing - j * 1000 - 1000 / 2
-                lat, lon = bngToLatLong.OSGB36toWGS84(easting, northing)
+                lat, lon = bng_to_latlong.OSGB36toWGS84(easting, northing)
                 row.append(str(lat) + ',' + str(lon))
                 i += 1
                 #if end of row
@@ -137,7 +162,12 @@ class Nimrod:
                     j += 1
 
     #Same as plot_bound_box() but allows you to specfify your own boundaries as x,y coords
-    def plot_sub_boundingbox(self,minx, maxx, miny , maxy):
+    def plot_sub_boundingbox(self,minx, maxx, miny , maxy, output):
+        if not output.endswith('.kml'):
+            exit('A .kml file must be specified.')
+        if not os.path.exists(os.path.dirname(output)):
+            exit('Cannot save file to location that does not exist')
+
         minEasting = -404500.0
         maxNorthing = 1549500.0
 
@@ -148,20 +178,16 @@ class Nimrod:
             if i >= minx and i <= maxx and j >= miny and j <= maxy:
                 easting = minEasting + i * 1000 + 1000 / 2
                 northing = maxNorthing - j * 1000 - 1000 / 2
-                lat, lon = bngToLatLong.OSGB36toWGS84(easting, northing)
+                lat, lon = bng_to_latlong.OSGB36toWGS84(easting, northing)
                 kml.newpoint(name=str(i) + ',' + str(j), coords=[(lon, lat)])
             i += 1
             if i == 1725:
                 i = 0
                 j += 1
-        kml.save("data/rainRadarCustomBoundingBox.kml")
+        kml.save(output)
 
     #For the given nimrod file return the data value for the given x,y pos
     def get_cell_data(self, x, y):
         if x > 1724 or y > 2174: #if outside the matrix
             return -2
         return self.data[(y * 1725) + x]
-
-
-
-

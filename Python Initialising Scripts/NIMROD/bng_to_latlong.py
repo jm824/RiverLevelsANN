@@ -1,5 +1,4 @@
 from math import sqrt, pi, sin, cos, tan, atan2 as arctan2
-import csv
 
 def OSGB36toWGS84(E,N):
 
