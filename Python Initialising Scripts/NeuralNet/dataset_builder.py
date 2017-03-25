@@ -1,27 +1,46 @@
-import nimrod_reader
 import datetime
 import csv
 import psycopg2
+import os
 
 """
+This script is for building data sets both to train and test a neural network.
+
 This python module attempts to build a training set in csv format ready to train an artificial neural
 network. It does this by readings in the specific catchment info for a individual neural network
 problem and then pulls the data from the database and nimrod files.
 
 This is done by this scrip in an attempt to better separate out the process and so the neural network
 does not need to be pulling data from the database and disk while training. Instead the network can
-be trained from a single csv file. This also vastly reduces training time. This script can better
+be trained from a single csv file loaded into memory. This also vastly reduces training time. This script can better
 handle the training data which contains missing values and is not always consistent. Ultimately this
-gives us better control over the training data.
+gives better control over the training data.
 """
 
 class DatasetBuilder:
-    def __init__(self, starttime, endtime, measure, outputfile, outputhour):
+    def __init__(self, starttime, endtime, measure, outputhour, outputfile):
         try:
+            #The starttime is the point in past data we want to start traning from
+            #The starttime is also the last known reading relative to making a prediction (origin)
             self.startTime = datetime.datetime.strptime(starttime, '%d-%m-%Y-%H%M')
+            #The endtime is the last point in past data we want to use as training data
             self.endTime = datetime.datetime.strptime(endtime,'%d-%m-%Y-%H%M')
         except:
             exit("Start time and/or end time was provided in an incorrect format. Correct format is dd-mm-yyyy-hhmm")
+
+        #Check filename and path provided are valid
+        if os.path.dirname(outputfile):
+            if not os.path.exists(os.path.dirname(outputfile)):
+                exit('Cannot save file to location that does not exist')
+        if not outputfile.endswith('.csv'):
+            exit('Specified file must be a .csv')
+
+        #Check epoch given is a integer between 1 and 12
+        try:
+            outputhour = int(outputhour)
+            if outputhour < 1 or outputhour > 12: raise ValueError
+        except ValueError:
+            exit('epoch provided was not a integer between 1 and 12 inclusive')
 
         self.gaugemeasure = measure
         self.epoch = outputhour
@@ -36,14 +55,14 @@ class DatasetBuilder:
             dbconn = psycopg2.connect(connection)
             self.cur = dbconn.cursor()
         except:
-            print('Connection to the database could not be established')
+            exit('Connection to the database could not be established')
 
         self.read_config() #Read in all the required reference data about the catchment
         with open(outputfile, 'w', newline='') as csvfile: #Open a file to write output to
             writer = csv.writer(csvfile, delimiter=',')
 
             count = 0
-            #Here we are reading in hour by hour
+            #Here we are creating the traning set as a sliding window, moving forward one hour for each traning instance
             while self.startTime < self.endTime:
                 pastgauge = self.ingest_past_measure_readings(self.startTime)
                 if pastgauge:
@@ -55,9 +74,8 @@ class DatasetBuilder:
                         count += 1
                         writer.writerow(self.inputrow)
                 self.startTime += datetime.timedelta(hours=1)
-                #print(count)
 
-            print(count)
+            print(count, 'training instances created')
         csvfile.close()
 
     #read in the catchment details from the database using the catchment's measure as reference
@@ -69,8 +87,10 @@ class DatasetBuilder:
             self.nimrodcells = result[0][1]
             self.srewstation = result[0][2]
         else:
-            exit("No record found for the given river measure.")
+            exit("No record found for the given river measure. Please ensure the measure is valid.")
 
+    #read in nimrod data from database for the time periods given
+    #Get data from time given going 12 hours back
     def ingest_nimrod(self, start):
         values = []
         bottomtimewindow = start - datetime.timedelta(hours=12)
@@ -85,11 +105,11 @@ class DatasetBuilder:
 
         result = self.cur.fetchall()
 
-        if not result: #check we get back any results
+        if not result: #check if the result is null or not
             values = None
             return values
 
-        bounds = [0,12,24,36,48,60,72,84,96,108,120]
+        bounds = [0,12,24,36,48,60,72,84,96,108,120] #these are the windows to which readings are collated
 
         values = []
         # for each bound -1
@@ -104,18 +124,20 @@ class DatasetBuilder:
                         return values
                 else: #else total up each 5 min period for the hour
                     scanavg = 0
-                    for cell in scan[0]:
+                    for cell in scan[0]: #for each 1km grid cell in the catchment
                         if cell < 0: cell = 0
                         scanavg += cell
-                    hourlyprecip += (scanavg/32)/len(scan[0])
+                    hourlyprecip += (scanavg/32)/len(scan[0]) #for each 5min scan of catchment calculate average rainfall rate
             values.append(hourlyprecip)
 
         return values
 
+    #read in srew data for the given time period stretching back 30 days
     def ingest_srew(self, start):
         values = []
         bottomtimewindow = start - datetime.timedelta(hours=720)
 
+        #get srew readings from time given stretching back 720 hours
         self.cur.execute("SELECT value FROM hourlysrewreading " \
             "WHERE stationid = %s" \
             "AND datetime < %s" \
@@ -126,14 +148,20 @@ class DatasetBuilder:
 
         bounds = [0, 1, 2, 3, 4, 5, 6,7,8,9,10,11,12, 24, 36, 48, 168, 336, 720]  #intervals at which to collate readings
 
+        #for each collation period total the amount of rainfall and stick in the the values list to be returned.
+        #we return 18 srew values collated as shown above
         for i in range(len(bounds)-1):
             total = 0
             for tuple in result[bounds[i]:bounds[i + 1]]:
-                total += tuple[0]
+                if not tuple[0]:
+                    total += 0
+                else:
+                    total += tuple[0]
             values.append(total)
 
         return values
 
+    #read in gauge data for given time period stretching back 6 hours. These are the past river levels.
     def ingest_past_measure_readings(self, start):
         bottomtimewindow = start - datetime.timedelta(hours=6)
         values = []
@@ -149,9 +177,10 @@ class DatasetBuilder:
                          datetime.datetime.strftime(bottomtimewindow, '%d-%m-%Y %H:%M'),))
 
         result = self.cur.fetchall()
-        for r in result: #Check for missing readings and attempt to correct/substitute
+        for r in result: #for each reading...
+            # Check for missing readings and attempt to correct/substitute
             if not r[0]: #if we have a null result for a gauge reading
-                #get readings 15 mins behind and ahead
+                #get readings 15 mins behind and ahead to see if we can substitute
                 self.cur.execute("SELECT value FROM hourlygaugereading " \
                                  "WHERE measureid = %s" \
                                  "AND datetime >= %s" \
@@ -170,19 +199,20 @@ class DatasetBuilder:
                 else:
                     values = None
                     return values #else this time point cannot be used to train with due to missing values - return null list
-            else: #else put the value in the list, they are valid
+
+            else: #else if not missing then put in value list to be returned
                 values.append(r[0])
 
         return values
 
 
-    #Collect the future readings from the epoch. These are the actual values that we are predicting
+    #Collect the future readings from the epoch. These are the actual values that we are predicting (used for validation)
     def ingest_future_measure_readings(self, start):
-        timetopredict = start + datetime.timedelta(hours=self.epoch -1)
+        timetopredict = start + datetime.timedelta(hours=self.epoch) #offset last taken reading by epoch to get time to predict
         values = []
 
         #Retrieve the future reading from the database using the provided epoch
-        self.cur.execute("SELECT value FROM hourlygaugereading " \
+        self.cur.execute("SELECT value, datetime FROM hourlygaugereading " \
                          "WHERE measureid = %s" \
                          "AND extract('minutes' from datetime) = 0" \
                          "AND datetime = %s", (
@@ -191,41 +221,25 @@ class DatasetBuilder:
 
         if not result[0][0]: #if we have a null result for the gauge reading at given epoch
             values = None
-            return values
+            return values #by returning null we will void this epoch (wont be used for traning)
         else:
             values.append(result[0][0])
+            values.append(self.epoch)
+            values.append(result[0][1])
             return values
-
-obj = DatasetBuilder('01-01-2017-0000', '31-01-2017-1255', '2133-level-stage-i-15_min-mASD', 'cat1_JAN2017_6hour.csv' ,6)
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='argument handler')
-    parser.add_argument('-start', '-s', required= True, help='Timestamp to read in data from - format: dd-mm-yyyy-hhmm')
-    parser.add_argument('-end', '-e', required=True, help='Timestamp to stop reading in data - format: dd-mm-yyyy-hhmm')
-    parser.add_argument('-measure', '-m', required=True, help='Measure for which to build training set for')
-    parser.add_argument('-output', '-o', required=True, help='The name and path of the output CSV file')
-    parser.add_argument('-neuroncount', '-n', required=False, help='The number of neurons to use in the second hidden layer')
+    parser.add_argument('startdatetime', help='The start datetime to start reading in readings for. dd-mm-yyyy hh:mm format')
+    parser.add_argument('enddatetime', help='The end datetime to stop reading in readings for. dd-mm-yyyy hh:mm format')
+    parser.add_argument('measure', help='The river measure to create a traning set for')
+    parser.add_argument('predictionepoch', help='The number of hours into the future to which to predict the river level for. Must be integer between 1 and 12 inclusive')
+    parser.add_argument('output', help='The path and filename of the csv output (training data file)')
     args = parser.parse_args()
 
-    try:
-        year = datetime.datetime.strptime(args.year, '%Y')
-    except ValueError:
-        print('The year was not entered in the correct format of yyyy')
-        exit()
+    DatasetBuilder(args.startdatetime, args.enddatetime, args.measure, args.predictionepoch, args.output)
 
-    try:
-        read_in_archive_data(year, args.path, args.station)
-    except FileNotFoundError:
-        print('No such file or directory')
-
-#This script should take the arguments:
-#start and stop datetime
-#measure
-#output file
-#output neuron? - only ever a single neuron will be the output and using one avoids missing values
-
-#option - number of neurons on second hidden layer
 
 
 
