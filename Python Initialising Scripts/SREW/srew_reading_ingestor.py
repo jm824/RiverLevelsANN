@@ -1,3 +1,8 @@
+import datetime
+import psycopg2
+import csv
+import os
+
 """
 Script to read in data from the archived SREW recordings csv files (downloaded from from CEDA).
 Specify the year to read in to the database as well as the station id
@@ -5,13 +10,8 @@ Optional - specify the directory containing the archive files as well as the end
             multiple years at once
 """
 
-import datetime
-import psycopg2
-import csv
-import os
-
 class IngestSrew:
-    def __init__(self, year, station, endyear=None, path=""):
+    def __init__(self, year, station, endyear, path=""):
         try:
             datetime.datetime.strptime(year, '%Y')
             year = int(year)
@@ -28,13 +28,14 @@ class IngestSrew:
             elif os.path.isfile(path):
                 path = os.path.split(path)[0]
 
-        origin = year
         while int(year) <= int(endyear):
             self.read_in_archive_file(year, path, station)
             self.fill_in_blanks(year, endyear, station)
             year += 1
 
+    #Read in a SREW readings file and pick out readings for given SREW station
     def read_in_archive_file(self, year, path, station):
+        #attemp to connect to the database
         connection = 'dbname=trout user=postgres password=67a256 host=localhost port=5432'
         try:
             dbconn = psycopg2.connect(connection)
@@ -42,11 +43,18 @@ class IngestSrew:
         except:
             exit('Connection to the database could not be established')
 
+        #check is the station provided is numeric
+        try:
+            int(station)
+        except ValueError:
+            exit(station + " is not a valid station")
+
+        #Check if the station provided is in the database
         cur.execute("SELECT id FROM srewstations WHERE id = (%s);", (station,))
         if cur.fetchone() is None:
             exit(station + " is not a valid station")
 
-    #for each day/fil
+    #for each day/file
         countEntered = 0
         countIgnored = 0
         file_path = os.path.join(path, 'midas_rainhrly_' + str(year) +'01-' + str(year) +'12' + '.txt')
@@ -76,7 +84,7 @@ class IngestSrew:
                         countIgnored +=1
                         dbconn.rollback()
                     except psycopg2.IntegrityError:
-                        #Reach here if the station id given is not in the database
+                        #Reach here if the reading has already been entered
                         countIgnored += 1
                         dbconn.rollback()
 
@@ -84,6 +92,8 @@ class IngestSrew:
         print('Number of entries: ' + str(countEntered))
         print('Number ignored: ' + str(countIgnored))
 
+    #After readings have been read in for a given year call this method to go back through the readings
+    #and enter a NULL entry into the database for every missing reading
     def fill_in_blanks(self, start, end, station):
         connection = 'dbname=trout user=postgres password=67a256 host=localhost port=5432'
         try:
@@ -112,7 +122,7 @@ class IngestSrew:
                           "VALUES (%(datetime)s, %(id)s, %(value)s);"
                     cur.execute(sql, reading)
                     dbconn.commit()
-                    print("Entered a null val", reading['datetime'])
+                    print("Entered a null value for", reading['datetime'])
                 except psycopg2.IntegrityError:
                     dbconn.rollback()
 
