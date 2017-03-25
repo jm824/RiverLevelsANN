@@ -18,7 +18,7 @@ gives better control over the training data.
 """
 
 class DatasetBuilder:
-    def __init__(self, starttime, endtime, measure, outputhour, outputfile):
+    def __init__(self, starttime, endtime, measure, outputhour, outputfile, minmaxfile=None):
         try:
             #The starttime is the point in past data we want to start traning from
             #The starttime is also the last known reading relative to making a prediction (origin)
@@ -41,6 +41,13 @@ class DatasetBuilder:
             if outputhour < 1 or outputhour > 12: raise ValueError
         except ValueError:
             exit('epoch provided was not a integer between 1 and 12 inclusive')
+
+        #check if minmaxfile is valid
+        if minmaxfile:
+            if not os.path.isfile(minmaxfile):
+                exit('Cannot find the provided min max .txt file')
+            if not minmaxfile.endswith('.txt'):
+                exit('min max file must be a .txt')
 
         self.gaugemeasure = measure
         self.epoch = outputhour
@@ -77,6 +84,53 @@ class DatasetBuilder:
 
             print(count, 'training instances created')
         csvfile.close()
+
+        #At this point we have created a training data file but will now create a version where the
+        #data is normalized
+
+        import pandas as pd
+
+        #Read the traning file back in
+        df = pd.read_csv(outputfile, header=None)
+
+        maxvals = []
+        minvals = []
+        count = 0
+        for column in df: #calculate the min and max of each col
+            if count == df.shape[1] - 2: #ignore the last two colunms are they are metadata for another purpose
+                break
+            max = df[column].max()
+            min = df[column].min()
+            maxvals.append(max)
+            minvals.append(min)
+            count += 1
+
+            celcount = 0
+            for num in df[column]: #normalize each value in the col
+                num = (num - min) / (max - min)
+                df.set_value(celcount, column, num)
+                celcount += 1
+
+        #save the min max values of each colunm in a text file
+        file = open(os.path.splitext(outputfile)[0] + '_min_max.txt', 'w')
+        first = True
+        for item in maxvals:
+            if first:
+                first = False
+                file.write("%s" % item)
+            else:
+                file.write(",%s" % item)
+        file.write("\n")
+
+        #save the normalized dataset using the same name with _normalized appended
+        first = True
+        for item in minvals:
+            if first:
+                first = False
+                file.write("%s" % item)
+            else:
+                file.write(",%s" % item)
+        df.to_csv(os.path.splitext(outputfile)[0] + "_normalized.csv", header=False, index=False)
 
     #read in the catchment details from the database using the catchment's measure as reference
     def read_config(self):
@@ -236,9 +290,10 @@ if __name__ == '__main__':
     parser.add_argument('measure', help='The river measure to create a traning set for')
     parser.add_argument('predictionepoch', help='The number of hours into the future to which to predict the river level for. Must be integer between 1 and 12 inclusive')
     parser.add_argument('output', help='The path and filename of the csv output (training data file)')
+    parser.add_argument('--minmax', '-m', required=False, help='The path to the max min .txt file for normalization')
     args = parser.parse_args()
 
-    DatasetBuilder(args.startdatetime, args.enddatetime, args.measure, args.predictionepoch, args.output)
+    DatasetBuilder(args.startdatetime, args.enddatetime, args.measure, args.predictionepoch, args.output, args.minmax)
 
 
 
