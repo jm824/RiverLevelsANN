@@ -15,6 +15,13 @@ does not need to be pulling data from the database and disk while training. Inst
 be trained from a single csv file loaded into memory. This also vastly reduces training time. This script can better
 handle the training data which contains missing values and is not always consistent. Ultimately this
 gives better control over the training data.
+
+After a dataset is built the .csv file produced is read back in and a normalized version created along
+with a .txt file which contains the min and max values of each column in order to allow for de-normalization
+of the data later. Alternatively a minmax.txt file can be provided and its values used to normalize the
+data.
+
+In total this script creates 3 files or 2 if a minmax.txt file is provided.
 """
 
 class DatasetBuilder:
@@ -89,48 +96,80 @@ class DatasetBuilder:
         #data is normalized
 
         import pandas as pd
+        from itertools import islice
 
-        #Read the traning file back in
-        df = pd.read_csv(outputfile, header=None)
+        #if a file contaning the min max value of each col is provided then use it to normalize the data
+        if minmaxfile:
+            df = pd.read_csv(outputfile, header=None)
+            max = []
+            min = []
+            # read in min/max col vals from training data
+            with open(minmaxfile) as fin:
+                for line in islice(fin, 1):
+                    max = line.split(",")
+                    max[len(max) - 1] = max[len(max) - 1].strip("\n")
 
-        maxvals = []
-        minvals = []
-        count = 0
-        for column in df: #calculate the min and max of each col
-            if count == df.shape[1] - 2: #ignore the last two colunms are they are metadata for another purpose
-                break
-            max = df[column].max()
-            min = df[column].min()
-            maxvals.append(max)
-            minvals.append(min)
-            count += 1
+                for line in islice(fin, 2):
+                    min = line.split(",")
+                    min[len(min) - 1] = min[len(min) - 1].strip("\n")
 
-            celcount = 0
-            for num in df[column]: #normalize each value in the col
-                num = (num - min) / (max - min)
-                df.set_value(celcount, column, num)
-                celcount += 1
+            colcount = 0
+            for column in df:
+                if colcount == df.shape[1] - 2: #ignore the last two colunms are they are metadata for another purpose
+                    break
+                colmax = float(max[colcount])
+                colmin = float(min[colcount])
+                count = 0
+                for num in df[column]:  # for each number in the col
+                    num = (num - colmin) / (colmax - colmin)
+                    df.set_value(count, column, num)
+                    count += 1
+                colcount += 1
 
-        #save the min max values of each colunm in a text file
-        file = open(os.path.splitext(outputfile)[0] + '_min_max.txt', 'w')
-        first = True
-        for item in maxvals:
-            if first:
-                first = False
-                file.write("%s" % item)
-            else:
-                file.write(",%s" % item)
-        file.write("\n")
+                df.to_csv(os.path.splitext(outputfile)[0] + "_normalized.csv", header=False, index=False)
+        #else calculate the min max value of each col and use that to normalize the data
+        else:
+            #Read the traning file back in
+            df = pd.read_csv(outputfile, header=None)
 
-        #save the normalized dataset using the same name with _normalized appended
-        first = True
-        for item in minvals:
-            if first:
-                first = False
-                file.write("%s" % item)
-            else:
-                file.write(",%s" % item)
-        df.to_csv(os.path.splitext(outputfile)[0] + "_normalized.csv", header=False, index=False)
+            maxvals = []
+            minvals = []
+            count = 0
+            for column in df: #calculate the min and max of each col
+                if count == df.shape[1] - 2: #ignore the last two colunms are they are metadata for another purpose
+                    break
+                max = df[column].max()
+                min = df[column].min()
+                maxvals.append(max)
+                minvals.append(min)
+                count += 1
+
+                celcount = 0
+                for num in df[column]: #normalize each value in the col
+                    num = (num - min) / (max - min)
+                    df.set_value(celcount, column, num)
+                    celcount += 1
+
+            #save the min max values of each colunm in a text file
+            file = open(os.path.splitext(outputfile)[0] + '_min_max.txt', 'w')
+            first = True
+            for item in maxvals:
+                if first:
+                    first = False
+                    file.write("%s" % item)
+                else:
+                    file.write(",%s" % item)
+            file.write("\n")
+
+            #save the normalized dataset using the same name with _normalized appended
+            first = True
+            for item in minvals:
+                if first:
+                    first = False
+                    file.write("%s" % item)
+                else:
+                    file.write(",%s" % item)
+            df.to_csv(os.path.splitext(outputfile)[0] + "_normalized.csv", header=False, index=False)
 
     #read in the catchment details from the database using the catchment's measure as reference
     def read_config(self):
