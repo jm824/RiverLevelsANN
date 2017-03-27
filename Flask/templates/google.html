@@ -1,0 +1,47 @@
+<body>
+
+<p>Lets see if we can get a chart working</p>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <br><br>
+  <div id="chart_div"></div>
+
+<script>
+    google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawCurveTypes);
+
+function drawCurveTypes() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'epoch');
+      data.addColumn('number', 'Predicted');
+      data.addColumn('number', 'Actual');
+
+    {% for d in data %}
+        data.addRow([{{ d[0] }},{{ d[1] }},{{ d[2] }}]);
+    {% endfor %}
+
+
+      var options = {
+          width: 1200,
+          height: 700,
+          title: '+1 hours: Predicted vs Actual',
+          hAxis: {
+          title: 'Date & Time'
+        },
+        vAxis: {
+          title: 'River Level (meters)'
+        },
+        explorer: {
+        },
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+</script>
+
+{% for d in data %}
+  <p>{{ d[0], d[1], d[2] }}</p>
+{% endfor %}
+</body>
+</html>
