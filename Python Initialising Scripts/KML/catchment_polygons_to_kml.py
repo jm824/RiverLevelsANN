@@ -1,6 +1,6 @@
 import os
 from xml.etree import ElementTree
-from bngToLatLong import OSGB36toWGS84
+from bng_to_latlong import OSGB36toWGS84
 import simplekml
 
 """
