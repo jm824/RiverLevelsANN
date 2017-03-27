@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div>
+<h1>Catchments:</h1>
+<p>
+    Below are the catchments (and their measure) for which predictions have been produced. All predictions cover the same period which is January 2017.
+</p>
+<p>
+    It is very important to note that catchments 2, 3 and 4 contained a distinct lack of training data due to missing values.
+    This means that the prediction results have suffered accordingly. Catchments 1 and 5 were trained with a significantly higher
+    amount of training instances. These catchments should therefore be used to draw a conclusion about the neural networks performance
+    for this problem.
+</p>
+<p>
+    Also note that the period of nowcasting usually only extends up to the period of 6 hours but, due to good results
+    (and for interest), I have created predictions 9 and 12 hours out for catchments 1 and 5.
+</p>
+<table>
+    <tr>Catchment & Measure</tr>
+{% for d in data %}
+    <tr>
+  <td><a href="/predictions/catchments/{{ d[1] }}">{{ d[0] }}</a></td><td><a href="/predictions/catchments/{{ d[1] }}">{{ d[1] }}</a></td>
+    </tr>
+{% endfor %}
+</table>
+
+<p>
+    This website does not formally form part of my CO600 submission but rather is a tool to more easily explore the results produced.
+    The charts here can be interacted with (you can zoom and pan around the data).
+</p>
+</div>
+</body>
+</html>
