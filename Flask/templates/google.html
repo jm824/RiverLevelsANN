@@ -1,6 +1,6 @@
 <body>
 
-<p>Lets see if we can get a chart working</p>
+<p>Oh what a chart. WHAT A LOVELY CHART!</p>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <br><br>
@@ -16,15 +16,14 @@ function drawCurveTypes() {
       data.addColumn('number', 'Predicted');
       data.addColumn('number', 'Actual');
 
-    {% for d in data %}
-        data.addRow([new Date({{ d[0] }}),{{ d[1] }},{{ d[2] }}]);
-    {% endfor %}
-
+        {% for d in data %}
+            data.addRow([new Date({{ d[0] }}),{{ d[1] }},{{ d[2] }}]);
+        {% endfor %}
 
       var options = {
           width: 1200,
           height: 700,
-          title: '+1 hours: Predicted vs Actual',
+          title: '{{ hour }} hours: Predicted vs Actual',
           hAxis: {
           title: 'Date & Time'
         },
@@ -40,8 +39,5 @@ function drawCurveTypes() {
     }
 </script>
 
-{% for d in data %}
-  <p>{{ d[0], d[1], d[2] }}</p>
-{% endfor %}
 </body>
 </html>

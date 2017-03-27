@@ -1,12 +1,15 @@
 <body>
 
-<p>Prediction periods for {{ measure }}:</p>
+<p>Available prediction periods for {{ measure }}:</p>
 
+<table>
+    <tr><td>These numbers correspond to the number of hours into the future the prediction is being made for</td>
 {% for d in data %}
-  <p>{{ d }}</p>
+    <tr>
+  <td><a href="/predictions/catchments/{{ measure }}/{{ d[0] }}">{{ d[0] }}</a></td>
+    </tr>
 {% endfor %}
-
-<p>This website uses Environment Agency flood and river level data from the real-time data API (Beta)</p>
+</table>
 
 </body>
 </html>

@@ -33,30 +33,31 @@ def get_predictions(measure):
         measure=measure
     )
 
-@app.route('/google')
-def google():
-    import datetime, time
+@app.route('/predictions/catchments/<measure>/<hour>')
+def google(measure, hour):
+    import time
     cur.execute(
         "SELECT riverlevelpredictions.datetime, riverlevelpredictions.value, hourlygaugereading.value FROM riverlevelpredictions " \
         "LEFT JOIN hourlygaugereading " \
         "ON riverlevelpredictions.datetime = hourlygaugereading.datetime " \
-        "WHERE riverlevelpredictions.measureid = '2133-level-stage-i-15_min-mASD' " \
-        "AND hourlygaugereading.measureid = '2133-level-stage-i-15_min-mASD' " \
-        "AND riverlevelpredictions.hoursahead = 6; ", )
+        "WHERE riverlevelpredictions.measureid = %s " \
+        "AND hourlygaugereading.measureid = %s " \
+        "AND riverlevelpredictions.hoursahead = %s; ", (measure, measure, hour))
     result = cur.fetchall()
-    #print(type(result[0]))
-    #print(result)
+
+    if not result:
+        from flask import abort
+        abort(404)
+
     result2 = []
     for r in result:
         for_js = int(time.mktime(r[0].timetuple())) * 1000
         r = (for_js,r[1],r[2])
         result2.append(r)
-    #print(result2)
-
-
     return render_template(
         'google.html',
-        data=result2
+        data=result2,
+        hour=hour
     )
 
 @app.route('/levels/<stationReference>')

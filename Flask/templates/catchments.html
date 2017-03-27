@@ -1,10 +1,16 @@
 <body>
 
-<p>Catchments:</p>
-
+<h1>Catchments:</h1>
+<p>Below are the catchments (and their measure) for which predictions have been produced. All predictions cover the same period which is January 2017.
+</p>
+<table>
+    <tr><td>Catchment</td><td>Measure</td></tr>
 {% for d in data %}
-  <p>{{ d[0] + ' ' + d[1]}}</p>
+    <tr>
+  <td><a href="/predictions/catchments/{{ d[1] }}">{{ d[0] }}</a></td><td><a href="/predictions/catchments/{{ d[1] }}">{{ d[1] }}</a></td>
+    </tr>
 {% endfor %}
+</table>
 
 <p>This website uses Environment Agency flood and river level data from the real-time data API (Beta)</p>
 
