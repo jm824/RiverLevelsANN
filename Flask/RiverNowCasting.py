@@ -51,7 +51,7 @@ def google():
         for_js = int(time.mktime(r[0].timetuple())) * 1000
         r = (for_js,r[1],r[2])
         result2.append(r)
-    print(result2)
+    #print(result2)
 
 
     return render_template(
