@@ -43,6 +43,7 @@ class ReadInNimrod:
         self.datapoints = self.cur.fetchall()
         self.ingest()
 
+    #Read in a nimrod file for a given datetime and read the data into the database for the given catchments
     def ingest(self):
         while self.startdatetime.time() <= self.enddatetime.time() and self.startdatetime.date() <= self.enddatetime.date():
             try:
