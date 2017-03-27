@@ -11,9 +11,10 @@ except:
     print('Connection to the database could not be established')
 
 @app.route('/')
+@app.route('/predictions/catchments/')
 def get_catchments():
     cur.execute(
-        "SELECT catchments.id, catchments.measure FROM catchments;", )
+        "SELECT catchments.id, catchments.measure FROM catchments ORDER BY id;", )
     result = cur.fetchall()
 
     return render_template(
@@ -27,6 +28,10 @@ def get_predictions(measure):
         "SELECT DISTINCT hoursahead FROM riverlevelpredictions WHERE measureid = %s ORDER BY hoursahead;", (measure,))
     result = cur.fetchall()
 
+    if not result:
+        from flask import abort
+        abort(404)
+
     return render_template(
         'prediction_periods.html',
         data=result,
@@ -34,7 +39,7 @@ def get_predictions(measure):
     )
 
 @app.route('/predictions/catchments/<measure>/<hour>')
-def google(measure, hour):
+def plot_chart(measure, hour):
     import time
     cur.execute(
         "SELECT riverlevelpredictions.datetime, riverlevelpredictions.value, hourlygaugereading.value FROM riverlevelpredictions " \
@@ -55,34 +60,11 @@ def google(measure, hour):
         r = (for_js,r[1],r[2])
         result2.append(r)
     return render_template(
-        'google.html',
+        'chart.html',
         data=result2,
-        hour=hour
+        hour=hour,
+        measure=measure
     )
-
-@app.route('/levels/<stationReference>')
-def get_readings(stationReference):
-    """Renders the station page."""
-    cur.execute("SELECT id FROM gaugestation WHERE id = %s;", (stationReference,))
-    localstations = cur.fetchall()
-
-    if not localstations:
-        return render_template(
-            'station.html',
-            stationName=stationReference,
-            message='No such station'
-        ), 404
-    else:
-        cur.execute(
-            "WITH r_measure AS (SELECT id FROM gaugemeasure WHERE station = %s AND qualifier = 'Stage')SELECT datetime, value FROM hourlygaugereading WHERE measureid IN (SELECT id FROM r_measure) ORDER BY datetime DESC LIMIT  10;" , (stationReference,))
-        result = cur.fetchall()
-        return render_template(
-            'station.html',
-            stationName=stationReference,
-            message='Viewing station %s' %stationReference,
-            data=result
-        )
-
 
 if __name__ == '__main__':
     app.run(debug=True)

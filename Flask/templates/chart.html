@@ -1,11 +1,13 @@
+<!DOCTYPE html>
+<html>
 <body>
-
-<p>Oh what a chart. WHAT A LOVELY CHART!</p>
-
+<div>
+    <h3>
+        A Chart for the measure {{ measure }} to show the predicted river levels vs the actual river levels for the month
+        of January 2017. These predictions forecast the river level {{ hour }} hours into the future.
+    </h3>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <br><br>
   <div id="chart_div"></div>
-
 <script>
     google.charts.load('current', {packages: ['corechart', 'line']});
 google.charts.setOnLoadCallback(drawCurveTypes);
@@ -23,9 +25,9 @@ function drawCurveTypes() {
       var options = {
           width: 1200,
           height: 700,
-          title: '{{ hour }} hours: Predicted vs Actual',
+          title: '{{ hour }} hours: Predicted River Level vs Actual',
           hAxis: {
-          title: 'Date & Time'
+          title: 'Date'
         },
         vAxis: {
           title: 'River Level (meters)'
@@ -38,6 +40,7 @@ function drawCurveTypes() {
       chart.draw(data, options);
     }
 </script>
-
+<a href="/predictions/catchments/{{ measure }}">Back</a>
+</div>
 </body>
 </html>
