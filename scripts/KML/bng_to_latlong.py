@@ -1,3 +1,10 @@
+"""
+This script was not produced by me but rather is the work of Hannah Fry.
+This script can be found here: http://www.hannahfry.co.uk/blog/2012/02/01/converting-british-national-grid-to-latitude-and-longitude-ii
+
+It is simply used to convert sets of coordinates from OSGB36 British National Grid (BNG) to latitude and longitude (WGS84)
+"""
+
 from math import sqrt, pi, sin, cos, tan, atan2 as arctan2
 
 def OSGB36toWGS84(E,N):

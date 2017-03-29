@@ -1,97 +1,114 @@
-CREATE TABLE GaugeStation(
-id VARCHAR(30) PRIMARY KEY,
-RLOIid VARCHAR(20) UNIQUE,
-catchmentName VARCHAR(75),	
-dateOpened DATE,
-datumOffset DECIMAL,
-label  VARCHAR(100) NOT NULL,
-notation  VARCHAR(75) NOT NULL,
-riverName VARCHAR(75),
-stationReference VARCHAR(20) NOT NULL,
-town VARCHAR(75),
-wiskiID VARCHAR(20),
-lat DECIMAL NOT NULL,
-long DECIMAL NOT NULL,
-easting INTEGER,
-northing INTEGER,
-status VARCHAR(200),
-statusReason VARCHAR(200),
-statusDate TIMESTAMP,
-type VARCHAR(20) NOT NULL,
-highestRecentDateTime TIMESTAMP,
-highestRecent DECIMAL,
-maxOnRecordDateTime TIMESTAMP,
-maxOnRecord DECIMAL,
-minOnRecordDateTime TIMESTAMP,
-minOnRecord DECIMAL,
-scaleMax DECIMAL,
-datum DECIMAL,
-typicalRangeHigh DECIMAL,
-typicalRangeLow DECIMAL
+CREATE TABLE catchments
+(
+    id VARCHAR(30) PRIMARY KEY NOT NULL,
+    raincells VARCHAR(8) [],
+    measure VARCHAR(60),
+    srewstation NUMERIC,
+    CONSTRAINT nimrodcatchments_measure_fkey FOREIGN KEY (measure) REFERENCES gaugemeasure (id),
+    CONSTRAINT catchments_srewstation_fkey FOREIGN KEY (srewstation) REFERENCES srewstations (id)
 );
-
-CREATE TABLE GaugeMeasure(
-id VARCHAR(60) PRIMARY KEY,
-datumType VARCHAR(20),
-label VARCHAR(100) NOT NULL,
-notation VARCHAR(75) NOT NULL,
-parameter VARCHAR(30) NOT NULL,
-parameterName VARCHAR(30) NOT NULL,
-period DECIMAL,
-qualifier VARCHAR(30) NOT NULL,
-station VARCHAR(30) REFERENCES GaugeStation (id),
-stationReference VARCHAR(20) NOT NULL,
-unit VARCHAR(30),
-unitName VARCHAR(20),
-valueType VARCHAR(20)
+CREATE TABLE failedstation
+(
+    id VARCHAR(30) PRIMARY KEY NOT NULL
 );
-
-CREATE TABLE GaugeReading(
-dateTime TIMESTAMP,
-measureId VARCHAR(60) REFERENCES GaugeMeasure (id),
-VALUE DECIMAL NOT NULL,
-PRIMARY KEY (dateTime, measureId)
+CREATE TABLE gaugemeasure
+(
+    id VARCHAR(60) PRIMARY KEY NOT NULL,
+    datumtype VARCHAR(20),
+    label VARCHAR(100) NOT NULL,
+    notation VARCHAR(75) NOT NULL,
+    parameter VARCHAR(30) NOT NULL,
+    parametername VARCHAR(30) NOT NULL,
+    period NUMERIC,
+    qualifier VARCHAR(30) NOT NULL,
+    station VARCHAR(30),
+    stationreference VARCHAR(20) NOT NULL,
+    unit VARCHAR(30),
+    unitname VARCHAR(20),
+    valuetype VARCHAR(20),
+    CONSTRAINT gaugemeasure_station_fkey FOREIGN KEY (station) REFERENCES gaugestation (id)
 );
-
+CREATE TABLE gaugestation
+(
+    id VARCHAR(30) PRIMARY KEY NOT NULL,
+    rloiid VARCHAR(20),
+    catchmentname VARCHAR(75),
+    dateopened DATE,
+    datumoffset NUMERIC,
+    label VARCHAR(100) NOT NULL,
+    notation VARCHAR(75) NOT NULL,
+    rivername VARCHAR(75),
+    stationreference VARCHAR(20) NOT NULL,
+    town VARCHAR(75),
+    wiskiid VARCHAR(20),
+    lat NUMERIC NOT NULL,
+    long NUMERIC NOT NULL,
+    easting INTEGER,
+    northing INTEGER,
+    status VARCHAR(200),
+    statusreason VARCHAR(200),
+    statusdate TIMESTAMP,
+    type VARCHAR(20) NOT NULL,
+    highestrecentdatetime TIMESTAMP,
+    highestrecent NUMERIC,
+    maxonrecorddatetime TIMESTAMP,
+    maxonrecord NUMERIC,
+    minonrecorddatetime TIMESTAMP,
+    minonrecord NUMERIC,
+    scalemax NUMERIC,
+    datum NUMERIC,
+    typicalrangehigh NUMERIC,
+    typicalrangelow NUMERIC
+);
+CREATE UNIQUE INDEX gaugestation_rloiid_key ON gaugestation (rloiid);
+CREATE TABLE ghoststation
+(
+    id VARCHAR(30) PRIMARY KEY NOT NULL
+);
 CREATE TABLE hourlygaugereading
 (
     datetime TIMESTAMP NOT NULL,
     measureid VARCHAR(60) NOT NULL,
-    value NUMERIC NOT NULL,
+    value NUMERIC,
     CONSTRAINT ghourlygaugereading_pkey PRIMARY KEY (datetime, measureid),
     CONSTRAINT gaugereading_measureid_fkey FOREIGN KEY (measureid) REFERENCES gaugemeasure (id)
 );
-
-CREATE TABLE SrewStations(
-id DECIMAL PRIMARY KEY,
-id_type VARCHAR(10),
-met_domain_name VARCHAR(15),
-src_id DECIMAL,
-lat DECIMAL NOT NULL,
-long DECIMAL NOT NULL,
-src_name VARCHAR(100)
-);
-
-CREATE TABLE HourlySrewReading
+CREATE TABLE hourlysrewreading
 (
     datetime TIMESTAMP NOT NULL,
-    stationId DECIMAL NOT NULL,
-    VALUE DECIMAL NOT NULL,
-    CONSTRAINT HourlySrewReading_pkey PRIMARY KEY (datetime, stationId),
-    CONSTRAINT HourlySrewReading_stationId_fkey FOREIGN KEY (stationId) REFERENCES SrewStations(id)
+    stationid NUMERIC NOT NULL,
+    value NUMERIC,
+    CONSTRAINT hourlysrewreading_pkey PRIMARY KEY (datetime, stationid),
+    CONSTRAINT hourlysrewreading_stationid_fkey FOREIGN KEY (stationid) REFERENCES srewstations (id)
 );
-
-CREATE TABLE nimrodcatchments
+CREATE TABLE naughtystation
 (
-    id VARCHAR(30) PRIMARY KEY,
-    raincells VARCHAR(8) ARRAY
+    id VARCHAR(30) PRIMARY KEY NOT NULL
 );
-
 CREATE TABLE nimrodreading
 (
-    id VARCHAR(30),
-    datetime TIMESTAMP,
-    data INTEGER ARRAY,
-    PRIMARY KEY (id, datetime),
-    CONSTRAINT nimrodreading_id_fkey FOREIGN KEY (id) REFERENCES nimrodcatchments (id)
+    id VARCHAR(30) NOT NULL,
+    datetime TIMESTAMP NOT NULL,
+    data INTEGER[],
+    CONSTRAINT nimrodreading_pkey PRIMARY KEY (id, datetime),
+    CONSTRAINT nimrodreading_id_fkey FOREIGN KEY (id) REFERENCES catchments (id)
+);
+CREATE TABLE riverlevelpredictions
+(
+    datetime TIMESTAMP NOT NULL,
+    measureid VARCHAR(60) NOT NULL,
+    hoursahead NUMERIC NOT NULL,
+    value NUMERIC,
+    CONSTRAINT riverlevelpredictions_pkey PRIMARY KEY (datetime, measureid, hoursahead),
+    CONSTRAINT riverlevelpredictions_measureid_fkey FOREIGN KEY (measureid) REFERENCES gaugemeasure (id)
+);
+CREATE TABLE srewstations
+(
+    id NUMERIC PRIMARY KEY NOT NULL,
+    id_type VARCHAR(10),
+    met_domain_name VARCHAR(15),
+    src_id NUMERIC,
+    lat NUMERIC NOT NULL,
+    long NUMERIC NOT NULL,
+    src_name VARCHAR(100)
 );

@@ -1,14 +1,15 @@
 select * from gaugemeasure
-WHERE id = 'L3211-level-stage-i-15_min-mAOD'
+WHERE id = '2133-level-stage-i-15_min-mASD'
 
 select * from gaugemeasure
-WHERE station = '2448TH'
+WHERE station = 'E13301'
+AND qualifier = 'Stage';
 
 select * from gaugemeasure
 WHERE qualifier = 'Groundwater'
 
 SELECT * FROM gaugestation
-WHERE id = '2448TH'
+WHERE id = '2133'
 
 SELECT * FROM gaugestation
 WHERE type = 'Groundwater'
@@ -23,7 +24,7 @@ SELECT *
 FROM gaugemeasure
 LEFT JOIN gaugestation
 ON gaugemeasure.station = gaugestation.id
-WHERE gaugestation.id = 'E21136';
+WHERE gaugestation.id = '2429TH';
 
 SELECT count(*)
 FROM gaugemeasure
@@ -51,10 +52,9 @@ SELECT * FROM(
   WHERE id = 'L3211'
 
 SELECT * FROM gaugereading
-			  WHERE datetime >= '2016-01-17 00:00'
-        AND datetime <= '2016-01-17 23:59'
-			  AND measureid = '2448TH-level-stage-i-15_min-mASD'
-ORDER BY datetime DESC
+
+			  where measureid = 'E13301-level-stage-i-15_min-mASD'
+ORDER BY datetime ASC;
 
 select count(*) from gaugereading
 
@@ -65,7 +65,7 @@ LIMIT 10;
 
 SELECT *
 FROM gaugemeasure
-WHERE station = '720215'
+WHERE station = '720215';
 
 WITH r_measure AS(
   SELECT id
@@ -84,14 +84,14 @@ LIMIT  10;
 WITH r_measure AS(
   SELECT id
   FROM gaugemeasure
-  WHERE station = 'L08015'
+  WHERE station = '50119'
   AND qualifier = 'Stage'
 )
 SELECT datetime, value
 FROM gaugereading
 WHERE measureid IN (SELECT id FROM r_measure)
 ORDER BY datetime DESC
-LIMIT  10;
+LIMIT  1000;
 
 SELECT datetime, measureid, value
 FROM gaugereading
@@ -114,6 +114,265 @@ ORDER BY datetime DESC
 
 SELECT id, lat, long
 FROM srewstations;
+WHERE id = '457096';
+
+SELECT *
+FROM hourlysrewreading
+WHERE stationid = '457096';
+
+SELECT *
+FROM gaugestation
+WHERE id = '2133';
+
+SELECT * FROM hourlygaugereading
+WHERE measureid = '2133-level-stage-i-15_min-mASD'
+ORDER BY datetime DESC;
+LIMIT 200;
+
+SELECT datetime, measureid, value
+FROM hourlygaugereading
+WHERE (datetime::TIME) = '00:00'
+AND measureid = '2133-level-stage-i-15_min-mASD'
+ORDER BY datetime ASC;
+LIMIT 31;
+
+
+SELECT datetime, measureid, value
+FROM hourlygaugereading
+WHERE datetime > '10-12-2016 23:00'
+AND datetime <= '17-12-2016'
+AND measureid = '2133-level-stage-i-15_min-mASD'
+ORDER BY datetime ASC;
+LIMIT 31;
+
+SELECT * FROM srewstations WHERE id = 457096;
+
+select * from hourlysrewreading
+WHERE datetime = '01-01-2016 00:00'
+
+SELECT value
+FROM hourlysrewreading
+WHERE stationid = 457096
+AND datetime <= '20-10-2016'
+AND datetime >= '06-10-2016';
+
+SELECT * FROM hourlysrewreading
+WHERE stationid = 457096
+AND datetime <= '01-01-2016 00:00'
+  ORDER BY datetime DESC
+LIMIT 337
+
+SELECT * FROM hourlysrewreading
+WHERE stationid = 457096
+AND datetime <= '01-01-2017 00:00'
+  AND hourlysrewreading.datetime >= '18-12-2016 00:00'
+  ORDER BY datetime DESC
+
+
+CREATE TABLE catchments
+(
+    id VARCHAR(30) PRIMARY KEY,
+    raincells VARCHAR(8) ARRAY
+);
+
+CREATE TABLE nimrodreading
+(
+    id VARCHAR(30),
+    datetime TIMESTAMP,
+    data INTEGER ARRAY,
+    PRIMARY KEY (id, datetime),
+    CONSTRAINT nimrodreading_id_fkey FOREIGN KEY (id) REFERENCES catchments (id)
+);
+
+INSERT INTO catchments (id, raincells)
+VALUES ('cat5', '{832 1408,833 1408,830 1409,831 1409,832 1409,833 1409,834 1409,835 1409,830 1410,831 1410,832 1410,833 1410,834 1410,835 1410,836 1410,829 1411,830 1411,831 1411,832 1411,833 1411,834 1411,835 1411,836 1411,830 1412,831 1412,832 1412,833 1412,834 1412,835 1412,836 1412,830 1413,831 1413,832 1413,833 1413,834 1413,835 1413,836 1413,837 1413,830 1414,831 1414,832 1414,833 1414,834 1414,835 1414,836 1414,837 1414,832 1415,833 1415,834 1415,835 1415,836 1415,837 1415,833 1416,834 1416,835 1416,836 1416,837 1416,834 1417,835 1417,836 1417,837 1417,837 1418
+}');
+
+select * from nimrodreading
+WHERE id = 'cat1'
+AND datetime >= '01-09-2016 00:00'
+AND datetime <= '31-09-2016 23:55'
+  ORDER BY datetime DESC
+
+select * from nimrodreading
+WHERE id = 'cat1'
+AND datetime >= '01-06-2016 00:00'
+AND datetime <= '31-12-2016 23:55'
+ORDER BY datetime DESC
+
+
+select * from nimrodreading
+WHERE id = 'cat1'
+ORDER BY datetime DESC
+LIMIT 7000
+
+select * from nimrodreading
+  WHERE id = 'cat1'
+ORDER BY datetime ASC
+LIMIT 100;
+
+select datetime, data from nimrodreading
+WHERE id = 'cat1'
+  AND datetime >= '15-09-2016 00:00'
+  AND datetime <= '29-09-2016 23:55'
+AND data is NULL
+
+select datetime, data from nimrodreading
+WHERE id = 'cat1'
+  AND datetime >= '15-09-2016'
+  AND datetime < '17-09-2016'
+
+select * from nimrodreading
+WHERE id = 'cat1'
+  AND datetime <= '01-01-2016'
+AND data is NULL
+ORDER BY datetime ASC
+
+select * from hourlygaugereading
+  WHERE value is NULL
+ORDER BY datetime DESC
+
+SELECT extract('minutes' from datetime) as hour, datetime, measureid, value
+FROM hourlygaugereading
+ORDER BY datetime DESC;
+
+SELECT datetime, measureid, value
+FROM hourlygaugereading
+  WHERE measureid = '2133-level-stage-i-15_min-mASD'
+
+  AND datetime < '11-12-2016 21:00'
+  AND datetime >= '11-12-2016 14:00'
+ORDER BY datetime DESC ;
+
+SELECT datetime, measureid, value
+FROM hourlygaugereading
+ORDER BY datetime DESC ;
+
+select * from hourlygaugereading
+where (datetime::TIME) = '00:00'
+AND value is NULL
+
+select * from hourlygaugereading
+
+ORDER BY datetime DESC
+
+select * from hourlysrewreading
+WHERE datetime >= '09-02-2016 00:00'
+AND datetime <= '09-02-2016 23:00'
+
+select * from hourlygaugereading
+where measureid = '2133-level-stage-i-15_min-mASD'
+AND datetime >= '11-12-2016 18:45'
+AND datetime <= '11-12-2016 19:15'
+AND datetime != '11-12-2016 19:00'
+
+SELECT datetime, measureid, value
+FROM hourlygaugereading
+  WHERE measureid = '2133-level-stage-i-15_min-mASD'
+  AND extract('minutes' from datetime) = 0
+  AND datetime < '11-12-2016 20:00'
+  AND datetime >= '11-12-2016 14:00'
+  AND hourlygaugereading.value IS NULL
+ORDER BY datetime DESC ;
+
+select * from nimrodreading
+where datetime < '16-12-2016 :14:00'
+  AND id = 'cat1'
+ORDER BY datetime DESC
+
+select * from nimrodreading
+where data is null
+and id = 'cat1';
+
+SELECT nimrodreading.id, nimrodreading.datetime, nimrodreading.data FROM nimrodreading
+INNER JOIN catchments ON nimrodreading.id = catchments.measure
+WHERE catchments.measure = '2133-level-stage-i-15_min-mASD';
+
+SELECT *
+FROM gaugemeasure
+LEFT JOIN gaugestation
+ON gaugemeasure.station = gaugestation.id
+WHERE gaugestation.id = '2429TH';
+
+SELECT nimrodreading.id, nimrodreading.datetime, nimrodreading.data
+FROM nimrodreading
+LEFT JOIN catchments
+  ON nimrodreading.id = catchments.id
+WHERE catchments.measure = '2133-level-stage-i-15_min-mASD';
+
+SELECT hourlysrewreading.stationid, hourlysrewreading.datetime, hourlysrewreading.value
+FROM hourlysrewreading
+LEFT JOIN catchments
+  ON hourlysrewreading.stationid = catchments.srewstation
+WHERE catchments.srewstation = 457096
+AND hourlysrewreading.datetime > '01-01-2016'
+
+SELECT id, raincells, measure FROM catchments WHERE measure = '2133-level-stage-i-15_min-mASD'
+
+
+select data from nimrodreading
+WHERE id = 'cat1'
+AND datetime < '01-01-2017 00:00'
+AND nimrodreading.datetime > '31-12-2016 12:00'
+ORDER BY datetime ASC
+
+--selet last record
+select count(datetime) from hourlysrewreading
+    WHERE date_part('year', datetime) = 2017
+  AND stationid = 336378
+ORDER BY datetime;
+
+SELECT datetime FROM hourlysrewreading
+  WHERE datetime >= '2017-01-01 00:00:00'
+  AND datetime <= '2017-01-31 23:00:00'
+ORDER BY datetime ASC
+
+select * from hourlysrewreading
+WHERE value IS NULL
+
+
+
+select * FROM hourlysrewreading
+where stationid = 336378
+ORDER BY datetime DESC
+
+select DISTINCT measureid FROM hourlygaugereading
+
+select count(*) from hourlygaugereading
+where measureid = '50119-level-stage-i-15_min-m'
+and value is  null
+
+select * from hourlygaugereading
+where measureid = '50119-level-stage-i-15_min-m'
+  AND value IS NOT NULL
+ORDER BY value ASC
+
+select count(*) from riverlevelpredictions
+where hoursahead = 9
+
+--for flask website
+SELECT catchments.id, catchments.measure FROM catchments;
+
+SELECT DISTINCT riverlevelpredictions.hoursahead FROM riverlevelpredictions
+WHERE measureid = '2133-level-stage-i-15_min-mASD'
+ORDER BY hoursahead;
+
+SELECT riverlevelpredictions.datetime, riverlevelpredictions.value, hourlygaugereading.value FROM riverlevelpredictions
+  LEFT JOIN hourlygaugereading
+  ON riverlevelpredictions.datetime = hourlygaugereading.datetime
+WHERE riverlevelpredictions.measureid = '2133-level-stage-i-15_min-mASD'
+  AND hourlygaugereading.measureid = '2133-level-stage-i-15_min-mASD'
+AND riverlevelpredictions.hoursahead = 6;
+
+
+
+
+
+
+
+
+
+
 
 
 
